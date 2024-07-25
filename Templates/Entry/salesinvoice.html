@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8" />
+      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <script src="https://kit.fontawesome.com/ae360af17e.js" crossorigin="anonymous"></script>
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous" />
+      <title>Sales</title>
+      <link rel="icon" href="/static/Icons/top.png" />
+      <link
+         href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css"
+         rel="stylesheet"
+         />
+      <style>
+         @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+         *,
+         ::after,
+         ::before {
+         box-sizing: border-box;
+         }
+         html,
+         body,
+         input,
+         textarea,
+         select {
+         box-sizing: border-box;
+         }
+         input::-webkit-outer-spin-button,
+         input::-webkit-inner-spin-button {
+         -webkit-appearance: none;
+         margin: 0;
+         }
+         input[type=number] {
+         -moz-appearance: textfield;
+         }
+         h3 {
+         font-size: 1.2375rem;
+         color: #000000;
+         }
+         a {
+         cursor: pointer;
+         text-decoration: none;
+         font-family: 'Poppins', sans-serif;
+         }
+         li {
+         list-style: none;
+         }
+         .wrapper {
+         align-items: stretch;
+         display: flex;
+         width: 100%;
+         }
+         #sidebar {
+         max-width: 200px;
+         min-width: 240px;
+         transition: all 0.35s ease-in-out;
+         box-shadow: 0 0 25px 0 rgba(30, 30, 30, 0.2);
+         z-index: 1111;
+         }
+         #sidebar.collapsed {
+         margin-left: -264px;
+         }
+         .main {
+         display: flex;
+         flex-direction: column;
+         min-height: 100vh;
+         width: 100%;
+         overflow: hidden;
+         transition: all 0.35s ease-in-out;
+         }
+         .sidebar-logo {
+         display: flex;
+         align-items: center;
+         }
+         .sidebar-logo img {
+         width: 141px;
+         height: 107px;
+         margin-left: 35px;
+         }
+         .sidebar-logo a {
+         color: linear-gradient(45deg, red, blue, skyblue);
+         font-size: 20px;
+         font-weight: 600;
+         text-decoration: none;
+         font-family: initial;
+         }
+         .sidebar-nav li a {
+         font-size: 12px;
+         color: rgba(0, 0, 0, 0.726);
+         }
+         .sidebar-header {
+         color: #ffffff;
+         font-size: 0.75rem;
+         padding: 1.5rem 1.5rem 0.375rem;
+         }
+         a.sidebar-link {
+         padding: 0.625rem 1.625rem;
+         color: skyblue;
+         position: relative;
+         display: block;
+         font-size: 1rem;
+         transition: background-color 0.3s, transform 0.3s;
+         }
+         .sidebar-link:hover {
+         transform: scale(1.05);
+         text-decoration: none;
+         }
+         .sidebar-link i {
+         margin-right: 10px;
+         transition: background-color 0.3s, transform 0.3s;
+         border-bottom: 1px solid transparent;
+         }
+         .sidebar-link.collapsed i {
+         margin-right: 0;
+         }
+         .sidebar-link:hover {
+         transform: scale(1.05);
+         text-decoration: none;
+         border-bottom: 1px solid #dee2e6;
+         }
+         .sidebar-link[data-bs-toggle='collapse']::after {
+         border: solid;
+         border-width: 0 0.075rem 0.075rem 0;
+         content: '';
+         display: inline-block;
+         padding: 2px;
+         position: absolute;
+         right: 1.5rem;
+         top: 1.4rem;
+         transform: rotate(-135deg);
+         transition: all 0.2s ease-out;
+         }
+         .sidebar-link[data-bs-toggle='collapse'].collapsed::after {
+         transform: rotate(45deg);
+         transition: all 0.2s ease-out;
+         }
+         .content {
+         flex: 1;
+         max-width: 100vw;
+         width: 100vw;
+         background-color: #f5f5f5;
+         padding: 20px;
+         }
+         @media (min-width: 768px) {
+         .content {
+         width: auto;
+         }
+         }
+         .navbar-toggler-icon {
+         background-color: #000;
+         }
+         .main {
+         height: 100%;
+         display: flex;
+         flex-direction: column;
+         justify-content: space-between;
+         }
+         .top-field {
+         display: flex;
+         }
+         #tab_logic thead th,
+         #tab_logic tbody td {
+         resize: both;
+         overflow: auto;
+         border: 1px solid #dee2e6;
+         }
+         #tab_logic th,
+         #tab_logic td {
+         position: relative;
+         }
+         #tab_logic th .select_row {
+         position: sticky;
+         top: 0;
+         z-index: 1;
+         background-color: #f5f5f5;
+         }
+         #delete_row {
+         display: block;
+         margin-left: 97%;
+         padding: 6px 12px;
+         }
+         #tab_logic_total th {
+         font-size: 12px;
+         }
+         .qty,
+         .price,
+         .discount,
+         .vat,
+         .total,
+         .unit {
+         width: 70px;
+         }
+         #tab_logic tbody tr {
+         transition: background-color 0.3s;
+         }
+         #tab_logic thead th {
+         transition: background-color 0.3s;
+         font-size: 10px;
+         }
+         #tab_logic tbody tr:hover {
+         background-color: rgba(97, 101, 105, 0.11);
+         }
+         #tab_logic thead th:hover {
+         background-color: rgba(97, 101, 105, 0.11);
+         }
+         .form-control:focus {
+         border-color: #ced4da;
+         box-shadow: none;
+         }
+         .form-check-input:focus {
+         box-shadow: none;
+         }
+         .btn:focus,
+         .btn:active {
+         box-shadow: none;
+         outline: none;
+         }
+         #tab_logic thead th:focus,
+         #tab_logic tbody td:focus {
+         outline: none;
+         box-shadow: none;
+         }
+         label {
+         font-size: 12px;
+         font-weight: bold;
+         }
+         .form-group {
+         display: flex;
+         align-items: center;
+         margin-bottom: 10px;
+         }
+         .form-group label {
+         flex: 1;
+         margin-right: 8px;
+         height: 24px;
+         font-size: 10px;
+         margin-top: 5px;
+         }
+         .form-control-small {
+         width: 210px;
+         font-size: 10px;
+         margin: 3px;
+         }
+         .Receipt {
+         display: inline-block;
+         width: 100px; /* Adjust the width as needed */
+         font-size: 10px;
+         margin: 3px;
+         color: black;
+         }
+         #receiptmode {
+         display: inline-block;
+         margin-right: 5px; /* Adjust the spacing between label and links */
+         }
+         #cashicon{
+         color: blue;
+         font-size: 15px;
+         }
+         #bankicon{
+         color: orangered;
+         font-size: 15px;
+         }
+         .left-form {
+         width: 208px;
+         font-size: 10px;
+         margin: 3px;
+         }
+         #last-div {
+         height: 8.3rem;
+         }
+         #last-div div label {
+         margin-top: -5px;
+         }
+         #last-div div select,
+         #last-div div input {
+         margin-top: 0;
+         }
+         #second-div div {
+         position: relative;
+         }
+         #second-div textarea {
+         position: absolute;
+         left: 7.1rem;
+         width: 38.8rem;
+         }
+         #nepali-datepicker,
+         #voucherdate {
+         cursor: pointer;
+         }
+         @media screen and (max-width: 1442px) {
+         #second-div textarea {
+         left: 5.6rem;
+         width: 37.3rem;
+         }
+         }
+         @media screen and (max-width: 1384px) {
+         #second-div textarea {
+         left: 4.4rem;
+         width: 36rem;
+         }
+         }
+         @media screen and (max-width: 1324px) {
+         #second-div textarea {
+         left: 3.8rem;
+         width: 35.3rem;
+         }
+         }
+         @media screen and (max-width: 1200px) {
+         #second-div textarea {
+         left: 1.4rem;
+         width: 35.3rem;
+         }
+         }
+         @media screen and (max-width: 768px) {
+         #second-div textarea {
+         position: static;
+         width: 12.7rem;
+         }
+         }
+         .special {
+         width: 160px;
+         font-size: 10px;
+         margin: 10px;
+         }
+         .date {
+         width: 120px;
+         font-size: 10px;
+         margin-right: 7px;
+         }
+         .left-form:focus {
+         box-shadow: none;
+         }
+         .form-control-small:focus {
+         box-shadow: none;
+         }
+         .select-small:focus {
+         box-shadow: none;
+         }
+         #second-div {
+         padding: 5px;
+         }
+         @media (max-width: 600px) {
+         .form-group {
+         flex-direction: column;
+         align-items: flex-start;
+         }
+         .form-group label {
+         margin-bottom: 5px;
+         }
+         .form-control-small,
+         .special,
+         .left-form,
+         .date {
+         width: 100%;
+         }
+         .form-control-small {
+         margin: 3px 0;
+         }
+         }
+         /* Styles for the voucher miti and date fields */
+         .voucher-date-group {
+         display: flex;
+         align-items: center;
+         }
+         .voucher-date-group label {
+         margin-right: 10px;
+         white-space: nowrap;
+         }
+         .voucher-date-group .form-control-small,
+         .voucher-date-group .date {
+         margin: 0 10px;
+         }
+      </style>
+      <link href="https://nepalidatepicker.sajanmaharjan.com.np/nepali.datepicker/css/nepali.datepicker.v4.0.1.min.css"
+         rel="stylesheet" type="text/css" />
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+   </head>
+   <body>
+      <!-- Modal -->
+      <div class="modal" style="z-index:100000;" id="cashModal" tabindex="-1" aria-labelledby="cashModal" aria-hidden="true">
+         <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h5 class="modal-title" id="cashModal">Please Enter The Amount</h5>
+               </div>
+               <div class="modal-body">
+                  <div>
+                     <label for="Amount">Amount</label>
+                     <input id="cash_receipt_amount" type="text" class="form-control" placeholder="Enter Your Amount" >
+                  </div>
+               </div>
+               <div class="modal-footer">
+                  <a onclick="cashModalClose()" class="btn btn-secondary">Close</a>
+                  <button onclick="handleCashReceiptSubmit()" type="submit" class="btn btn-primary">Save</button>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="modal" id="bankModal" style="z-index:10000;" tabindex="-1" aria-hidden="true">
+         <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h5 class="modal-title" id="bankModal">Please Select Ledger</h5>
+               </div>
+               <div class="modal-body">
+                  <div class="form-group">
+                     <label for="Sales Ledger">Ledger</label>
+                     <select  id="bank_receipt_ledger" class="form-control" id="salesLedger" required name="sales_ledger" >
+                        {% for data in ledger_data %}
+                        <option value="{{data.name}}">{{data.name}}</option>
+                        {% endfor %}
+                     </select>
+                  </div>
+                  <div>
+                     <label for="Amount">Amount</label>
+                     <input id="bank_receipt_amount" type="text" class="form-control" placeholder="Enter Your Amount" >
+                  </div>
+               </div>
+               <div class="modal-footer">
+                  <a onclick="handleBankModalClose()" class="btn btn-secondary">Close</a>
+                  <button onclick="handleBankReceiptSubmit()" type="submit" class="btn btn-primary">Save</button>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="wrapper">
+         <!-- Sidebar HTML -->
+         <aside id="sidebar">
+            <div class="h-100">
+               <div class="sidebar-logo">
+                  <a href="{% url "menu_page" %}">
+                  <img src="/static/Logo/logo.png" alt="">
+                  </a>
+               </div>
+               <div style="text-align: center; margin-top: 20px;">
+                  <h3><i class="ri-bubble-chart-line"></i> Status</h3>
+               </div>
+               <div style="margin-top: 30px;">
+                  <ul class="sidebar-nav">
+                     <li>
+                        <a href="#"><i class="ri-arrow-drop-right-line"></i> Name <i class="ri-arrow-drop-right-line"></i><span id="status_name"></span></a>
+                     </li>
+                     <li>
+                        <a href="#"><i class="ri-arrow-drop-right-line"></i> Group <i class="ri-arrow-drop-right-line"></i><span id="status_group"></span></a>
+                     </li>
+                     <li>
+                        <a href="#"><i class="ri-arrow-drop-right-line"></i> Address <i class="ri-arrow-drop-right-line"></i><span id="status_address"></span></a>
+                     </li>
+                     <li>
+                        <a href="#"><i class="ri-arrow-drop-right-line"></i> Pan <i class="ri-arrow-drop-right-line"></i><span id="status_pan"></span></a>
+                     </li>
+                     <li>
+                        <a href="#"><i class="ri-arrow-drop-right-line"></i> Phone <i class="ri-arrow-drop-right-line"></i><span id="status_phone"></span></a>
+                     </li>
+                     <li>
+                        <a href="#"><i class="ri-arrow-drop-right-line"></i> Email <i class="ri-arrow-drop-right-line"></i><span id="status_email"></span></a>
+                     </li>
+                  </ul>
+               </div>
+               {% if voucher.status == "pending" %}
+               <li style='margin-left:50px ; margin-top: 50px; '>
+                  <a style="color: black" href="{% url 'salesconfig' %}?type=sales_invoice"><i class='fa fa-exchange' ></i> Voucher Setup</a>
+               </li>
+               {% endif %}
+            </div>
+         </aside>
+         <form action="#" method="post">
+            {% csrf_token %}
+            <div class="main">
+               <main class="content">
+                  <div class="homemap container mt-6">
+                     <div class="row">
+                        <h5>Sales Voucher</h5>
+                        <hr>
+                        <!-- Left Column -->
+                        <div class="col-md-4" id="first-div">
+                           <div class="form-group">
+                              <label for="phoneInput">Voucher No</label>
+                              <input type="text" value="{{voucher_no}}" readonly  class="form-control form-control-small" placeholder=""
+                                 name="voucher_number" >
+                           </div>
+                           <div class="form-group">
+                              <label for="dealer">Dealer Name <a href="{% url "dealer_setup" %}"
+                              style="color: rgb(0, 102, 255);"> <i class="fa fa-plus"></i></a></label>
+                              <input list="customer_name" name="dealer_name" id="dealer"
+                                 class="form-control form-control-small" placeholder="Select Dealer" readonly>                
+                           </div>
+                           <div class="form-group" style="white-space: nowrap;">
+                              <label id="receiptmode" for="dealer">Receipt Mode</label>
+                              <div style="cursor:pointer; font-size: 12px;" onclick="handleCashModalPopup()" class="cashReceipt"><i class="ri-cash-fill" id="cashicon"></i>  Cash Receipt</div>
+                              <div style="cursor:pointer; font-size: 12px; margin-left: 25px; " onclick="handleBankModalPopup();" class="bankReceipt"><i class="ri-bank-line" id="bankicon"></i>  Bank Receipt</div>
+                           </div>
+                        </div>
+                        <!-- Center Column -->
+                        <div class="col-md-4" id="second-div">
+                           <div class="form-group">
+                              <label for="voucherdate">Date/Miti</label>
+                              <input class="form-control date" id="voucherdate" type="date" name="voucher_date">
+                              <input type="text" class="form-control date" itemid="vouchermiti"
+                                 name="voucher_miti" id="nepali-datepicker" placeholder="Nepali Miti" />
+                           </div>
+                           <div class="form-group">
+                              <label for="paymentmethod">Payment Method</label>
+                              <select class="form-select left-form" id="paymentmethod" name="paymenth_method">
+                                 <option value="Cash">Cash</option>
+                                 <option value="Credit">Credit</option>
+                                 <option value="Cheque">Cheque</option>
+                                 <option value="Mobile Banking">Mobile Banking</option>
+                                 <option value="Esewa">Esewa</option>
+                                 <option value="Khalti">Khalti</option>
+                                 <option value="IME">IME</option>
+                                 <option value="I-Banking">I-Banking</option>
+                              </select>
+                           </div>
+                        </div>
+                        <!-- Right Column -->
+                        <div class="col-md-4" id="last-div">
+                           <div class="form-group" style="margin-top: 7px;"  >
+                              <label for="party">Party Name <a href="{% url "customer_setup" %}"
+                              style="color: rgb(0, 102, 255);"> <i class="fa fa-plus"></i></a></label>
+                              <input list="customer_name" name="customer_name" id="party"
+                                 class="form-control form-control-small" autocomplete="off" placeholder="Select Or Type">
+                              <datalist id="customer_name">
+                                 {% for customer in cdata %}
+                                 <option value="{{ customer.name }}" data-id={{customer.id}}>
+                                    {% endfor %}
+                              </datalist>
+                           </div>
+                           <div class="form-group" >
+                           <label for="reference">Reference No</label>
+                           <input type="number" class="form-control form-control-small" id="reference"
+                              placeholder="Refrence No" name="refrence_number">
+                           </div>       
+                           <div id="remarks" class="mr-name-container">
+                           <div class="form-group" style="margin-right: 10px;">
+                           <label for="nameInput">Remarks</label>                                                   
+                           <input  type="text" class="form-control" name="remarks" placeholder="Enter Remarks" style="padding: 5px ; font-size: 10px;" >                               
+                           </div>
+                           </div>
+                        </div>
+                        <hr>
+                     </div>
+                     <div class="row clearfix">
+                     <div class="col-md-12">
+                     <table class="table table-bordered table-hover" id="tab_logic">
+                     <thead>
+                     <tr>
+                     <th class="text-center"> <input type="checkbox" id="check_all"> </th>
+                     <th class="text-center"> S.N </th>
+                     <th class="text-center"> Product <a style='font-size:10px' href="{% url "i_setup" %}"
+                     style="color: rgb(0, 102, 255); font-size: 12px;"> <i
+                        class="fa fa-plus"></i> 
+                     </th>
+                     <th class="text-center"> Qty </th>
+                     <th class="text-center"> Unit</th>
+                     <!-- New column for unit -->
+                     <th class="text-center"> Price </th>
+                     <th class="text-center"> Discount </th>
+                     <th class="text-center"> Vat </th>
+                     <th class="text-center"> Total </th>
+                     </tr>
+                     </thead>
+                     <tbody>
+                     <tr class='addr0'>
+                     <td><input type="checkbox" class="select_row"></td>
+                     <td>1</td>
+                     <td>
+                     <input id ="product" data-child="product_0" list="products" name="product" class="form-control form-control-sm"
+                        placeholder="Product Name" style="width: 440px;">
+                     <datalist id="products">
+                     {% for data in idata %}
+                     <option value="{{data.item_name}}">
+                     {% endfor %}
+                     </datalist>
+                     </td>
+                     <td><input type="number" name='qty[]' class="form-control form-control-sm qty"
+                        step="0" min="0" id="qty" placeholder="0.00"></td>
+                     <td>
+                     <select id="product_unit" name='unit[]' class="form-control form-control-sm unit"
+                        style="width: 71px;" >
+                     <!-- Add your unit options here -->
+                     {% for unit in udata %}
+                     <option value="{{unit.unit_symbol}}">{{unit.unit_symbol}}</option>
+                     {% endfor %}
+                     </select>
+                     </td>
+                     <td><input type="number" name='price[]'
+                        class="form-control form-control-sm price" step="0.00" min="0" id="pr"
+                        placeholder="0.00"></td>
+                     <td><input type="text" name='discount[]'
+                        class="form-control form-control-sm discount" step="0.00" min="0"
+                        id="dis" placeholder="0.00"></td>
+                     <td><input type="text" name='vat[]' class="form-control form-control-sm vat"
+                        step="0.00" min="0" id="tx" placeholder="0.00"></td>
+                     <td><input type="number" name='total[]'
+                        class="form-control form-control-sm total" readonly id="tm"
+                        placeholder="0.00"></td>
+                     </tr>
+                     </tbody>
+                     </table>
+                     <button id='delete_row' type="button" class="btn btn-default btn-sm pull-right"><i
+                        class="fa fa-trash" aria-hidden="true"></i></button>
+                     </div>
+                     </div>
+                     <div class="row clearfix">
+                        <div class="col-md-12">
+                           <button id="add_row" type="button" class="btn btn-default btn-sm pull-left"></button>
+                        </div>
+                     </div>
+                     <div class="row clearfix" style="margin-top: 0px; justify-content: flex-end;">
+                        <div class="col-md-4">
+                           <table class="table table-bordered table-hover" id="tab_logic_total">
+                              <tbody>
+                                 <tr>
+                                    <th class="text-center">Total</th>
+                                    <td class="text-center"><input type="number" name='sub_total' placeholder='0.00'
+                                       class="form-control form-control-sm" id="sub_total" readonly /></td>
+                                 </tr>
+                                 <tr>
+                                    <th class="text-center">Discount</th>
+                                    <td class="text-center"><input type="number" placeholder='0.00'
+                                       class="form-control form-control-sm" name='total_discount'
+                                       id="total_discount" readonly></td>
+                                 </tr>
+                                 <tr>
+                                    <th class="text-center" style="width:200px">Taxable Amount</th>
+                                    <td class="text-center"><input type="number" placeholder='0.00'
+                                       class="form-control form-control-sm" name='tax_amount' id="tax_amount"
+                                       readonly></td>
+                                 </tr>
+                                 <tr>
+                                    <th class="text-center">VAT</th>
+                                    <td class="text-center">
+                                       <div class="input-group mb-2 mb-sm-0">
+                                          <input type="text" name="vat" class="form-control form-control-sm"
+                                             id="total_vat" placeholder="0.00" readonly>
+                                          <div class="input-group-addon input-group-addon-sm"></div>
+                                       </div>
+                                    </td>
+                                 </tr>
+                                 <tr>
+                                    <th class="text-center">Grand Total</th>
+                                    <td class="text-center"><input type="number" name='grand_total'
+                                       id="total_amount" placeholder='0.00'
+                                       class="form-control form-control-sm" readonly /></td>
+                                 </tr>
+                              </tbody>
+                           </table>
+                           <button type="button" id="save_button" onclick="saved();" class="btn btn-primary btn-sm mx-1">Save</button>
+                           <button type="button" class="btn btn-warning btn-sm mx-1">Save & Print</button>
+                        </div>
+                     </div>
+                  </div>
+               </main>
+         </form>
+         <!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> -->
+         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+         <script src="https://nepalidatepicker.sajanmaharjan.com.np/nepali.datepicker/js/nepali.datepicker.v4.0.1.min.js"
+            type="text/javascript"></script>
+         <script src="https://cdn.jsdelivr.net/npm/@sbmdkl/nepali-date-converter@2.0.3/dist/@sbmdkl/nepali-date-converter.umd.min.js"></script>
+         <script>
+            function loadCurrentSystemDate() {
+                // For English Date
+                var currentDate = new Date();
+                var year = currentDate.getFullYear();
+                var month = String(currentDate.getMonth() + 1).padStart(2, '0');
+                var day = String(currentDate.getDate()).padStart(2, '0');
+                var formattedDate = `${year}-${month}-${day}`;
+            
+                document.getElementById('voucherdate').value = formattedDate;
+                const { adToBs } = window['@sbmdkl/nepali-date-converter'];
+                var bsDate = adToBs(`${year}-${month}-${day}`);
+            
+                document.getElementById("nepali-datepicker").value = bsDate;
+            
+            }
+            window.onload = function () {
+                loadCurrentSystemDate();
+                var mainInput = document.getElementById("nepali-datepicker");
+                mainInput.nepaliDatePicker();
+            
+                // Event listener for English date input
+                document.getElementById('voucherdate').addEventListener('input', function() {
+                    var englishDate = new Date(this.value);
+                    loadNepaliDate(englishDate);
+                });
+            
+            var nepaliDatepicker = document.getElementById('nepali-datepicker');
+            
+                nepaliDatepicker.nepaliDatePicker({
+                onChange: function() {
+                    handleNepaliDateChange(nepaliDatepicker.value);
+                }
+            });
+            function handleNepaliDateChange() {
+                var nepaliDate = nepaliDatepicker.value;
+                console.log(nepaliDate)
+                var parts = nepaliDate.split('-');
+                if (parts.length === 3) {
+                    var nepaliYear = parseInt(parts[0]);
+                    var nepaliMonth = parseInt(parts[1]);
+                    var nepaliDay = parseInt(parts[2]);
+                    const { bsToAd } = window['@sbmdkl/nepali-date-converter'];
+                var adDate = bsToAd(`${nepaliYear}-${nepaliMonth}-${nepaliDay}`);
+            
+                    document.getElementById('voucherdate').value = adDate;
+                }
+            }
+            
+            nepaliDatepicker.addEventListener('input', handleNepaliDateChange);
+              
+            };
+            
+            function loadNepaliDate(englishDate) {
+            
+                var year=englishDate.getFullYear()
+                var month=String(englishDate.getMonth()+1).padStart(2, '0');
+                var day=String(englishDate.getDate()).padStart(2,'0')
+                console.log(year,month,day,'day')
+                const { adToBs } = window['@sbmdkl/nepali-date-converter'];
+                var bsDate = adToBs(`${year}-${month}-${day}`);
+                console.log(bsDate)
+            
+                document.getElementById("nepali-datepicker").value = bsDate;
+            
+            }
+            
+             
+            
+            $(document).ready(function () {
+                var i = 1;
+            
+                $("#add_row").click(function () {
+                    var newRow = '<tr class="addr' + i + '"><td><input type="checkbox" class="select_row"></td><td>' + (i + 1) +
+                        '</td><td><input id="product" data-child="product_'+i+'"list="products" placeholder="Product Name"  name="product" id="product_' + i +
+                        '" class="form-control form-control-sm product input-field" >' +
+                        '<datalist id="products" style="width: 395px;">' +
+                        ' {% for data in idata  %}' +
+                        ' <option value="{{data.item_name}}"></option>' +
+                        ' {% endfor %}' +
+                        '</datalist></td><td><input type="number" name="qty[]" class="form-control form-control-sm qty input-field" placeholder="0.00" step="0" min="0"/></td><td><select id="unit_'+i+'" name="unit[]" class="form-control form-control-sm unit input-field"  >{% for unit in udata  %}<option value="{{unit.unit_symbol}}">{{unit.unit_symbol}}</option>{% endfor %}  </select></td><td><input type="number" name="price[]" class="form-control form-control-sm price input-field" placeholder="0.00" step="0.00" min="0"/></td><td><input type="text" name="discount[]" class="form-control form-control-sm discount input-field" placeholder="0.00" /></td><td><input type="text" name="vat[]" class="form-control form-control-sm vat input-field" placeholder="0.00" step="0.00" min="0"/></td><td><input type="number" name="total[]" class="form-control form-control-sm total total-input" placeholder="0.00" readonly/></td></tr>';
+            
+                    $('#tab_logic').append(newRow);
+            
+                    calc();
+            
+                    i++;
+                    // Move focus to the first input of the newly added row
+                    $('#product_' + i).focus();
+                });
+                        // Event delegation to handle the input event on dynamically added #product elements
+            $('#tab_logic').on('input', '.product', async function (e) {
+            const value = e.target.value;
+            console.log('value',value)
+            const idata = "{{idata}}";
+            if (value === "" || !idata.includes(value)) {
+                return;
+            }
+            const response = await fetch(`{% url 'get_product_detail_ajax' %}?name=${value}`);
+            const jsonData = await response.json();
+            const data = jsonData.data;
+            // Find the corresponding unit select element in the same row
+            $(e.target).closest('tr').find('.unit').val(data.unit).prop('disabled', true);
+            });
+            
+                $('#tab_logic tbody').on('change', '.select_row', function () {
+                    calc();
+                });
+            
+                $('#delete_row').on('click', function () {
+                    $(".select_row:checked").each(function () {
+                        $(this).closest('tr').remove();
+                    });
+                    calc();
+                });
+            
+                $(document).keydown(function (e) {
+                    if (e.altKey) {
+                        switch (e.which) {
+                            case 88:
+                                // Alt + X: Select the currently focused row
+                                var focusedRow = $(':focus').closest('tr');
+                                focusedRow.find('.select_row').prop("checked", true);
+                                break;
+                            case 90:
+                                // Alt + Z: Delete selected row
+                                $(".select_row:checked").each(function () {
+                                    $(this).closest('tr').remove();
+                                });
+                                calc();
+                                break;
+                            case 81:
+                                // Alt + Q: Trigger primary button click
+                                $(".btn-primary").click();
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                });
+            
+                $('#tab_logic tbody').on('keyup', 'input', function (e) {
+                    if (e.which == 13) {
+                        var $inputs = $(this).closest('tr').find(':input');
+                        var idx = $inputs.index(this);
+                        if (idx == $inputs.length - 1) {
+                            $("#add_row").click();
+                        } else {
+                            $inputs.eq(idx + 1).focus();
+                        }
+                    }
+                    calc();
+                });
+            
+                $(".btn-primary").click(function () {
+                    setTimeout(function () {
+                        console.log("Save operation completed");
+                    }, 3000);
+                });
+            
+                // Function to calculate discount (accepts both percentage and amount)
+                function calculateDiscount(discountInput, total) {
+                    var discount = parseFloat(discountInput) || 0;
+            
+                    if (discountInput.includes('%')) {
+                        // If the discount is in percentage, convert to amount
+                        return (total * (discount / 100));
+                    } else {
+                        return discount;
+                    }
+                }
+            
+                // Function to calculate VAT (accepts both percentage and amount)
+                function calculateVAT(vatInput, total) {
+                    var vat = parseFloat(vatInput) || 0;
+            
+                    if (vatInput.includes('%')) {
+                        // If VAT is in percentage, convert to amount
+                        return (total * (vat / 100));
+                    } else {
+                        return vat;
+                    }
+                }
+            
+                // Function to calculate and update totals for a specific row
+                function updateRowTotals(row) {
+                    var qty = parseFloat(row.find('.qty').val()) || 0;
+                    var price = parseFloat(row.find('.price').val()) || 0;
+            
+                    // Step 1: Calculate total without discount
+                    var rowTotal = qty * price;
+            
+                    // Step 2: Apply discount
+                    var discountInput = row.find('.discount').val();
+                    var discountVal = calculateDiscount(discountInput, rowTotal);
+            
+                    // Step 3: Calculate total after discount
+                    var totalAfterDiscount = rowTotal - discountVal;
+            
+                    // Step 4: Apply VAT
+                    var vatInput = row.find('.vat').val();
+                    var vatVal = calculateVAT(vatInput, totalAfterDiscount);
+            
+                    // Step 5: Calculate Grand Total
+                    var grandTotal = totalAfterDiscount + vatVal;
+            
+                    // Display the calculated values for the current row
+                    row.find('.total').val(grandTotal.toFixed(2));
+                    row.find('.sub_total').val(rowTotal.toFixed(2));
+                    row.find('.total_discount').val(discountVal.toFixed(2));
+                    row.find('.tax_amount').val(totalAfterDiscount.toFixed(2));
+                    row.find('.total_vat').val(vatVal.toFixed(2));
+                    row.find('.total_amount').val(grandTotal.toFixed(2));
+            
+                    // No need to call updateRightBottomTable here
+                }
+            
+                // Function to calculate discount (accepts both percentage and amount)
+                function calculateDiscount(discountInput, total) {
+                    var discount = parseFloat(discountInput) || 0;
+            
+                    if (discountInput.includes('%')) {
+                        // If the discount is in percentage, convert to amount
+                        return (total * (discount / 100));
+                    } else {
+                        return discount;
+                    }
+                }
+            
+                // Function to calculate VAT (accepts both percentage and amount)
+                function calculateVAT(vatInput, total) {
+                    var vat = parseFloat(vatInput) || 0;
+            
+                    if (vatInput.includes('%')) {
+                        // If VAT is in percentage, convert to amount
+                        return (total * (vat / 100));
+                    } else {
+                        return vat;
+                    }
+                }
+            
+                function updateRightBottomTable() {
+                    console.log("Updating right-bottom table...");
+            
+                    var totalSubTotal = 0;
+                    var totalDiscount = 0;
+                    var totalTaxAmount = 0;
+                    var totalVAT = 0;
+                    var totalGrandTotal = 0;
+            
+                    $(".price").each(function (index) {
+                        var price = $(this).val();
+                        if (price !== "") {
+                            var quantity = $(".qty").eq(index).val();
+                            totalSubTotal += parseFloat(price) * parseFloat(quantity);
+            
+                            var discount = $(".discount").eq(index);
+                            var disAmt = 0;
+                            if (discount.val() !== "") {
+                                if (discount.val().includes("%")) {
+                                    disAmt = (parseFloat(discount.val()) * parseFloat(price) / 100) * parseFloat(quantity);
+                                } else {
+                                    disAmt = parseInt(discount.val());
+                                }
+                            }
+                            totalDiscount += disAmt;
+            
+                            var vatElem = $(".vat").eq(index);
+                            var vatAmt = 0;
+                            if (vatElem.val() !== "") {
+                                if (vatElem.val().includes("%")) {
+                                    vatAmt = (parseFloat(price) * parseFloat(quantity) - disAmt) * parseInt(vatElem.val()) / 100;
+                                } else {
+                                    vatAmt = parseInt(vatElem.val());
+                                }
+                            }
+                            totalVAT += vatAmt;
+            
+                            var taxableAmt = (parseFloat(price) * parseFloat(quantity)) - disAmt;
+                            totalTaxAmount += taxableAmt;
+                        }
+                    });
+            
+                    $(".total").each(function () {
+                        var total = $(this).val();
+                        if (total !== "") {
+                            totalGrandTotal += parseFloat(total);
+                        }
+                    });
+            
+                    console.log("totalSubTotal = ", totalSubTotal);
+                    console.log("totalDiscount = ", totalDiscount);
+                    console.log("totalTaxAmt = ", totalTaxAmount);
+                    console.log("totalVAT = ", totalVAT);
+                    console.log("totalGrandTotal = ", totalGrandTotal);
+            
+                    $("#sub_total").val(totalSubTotal);
+                    $("#total_discount").val(totalDiscount);
+                    $("#tax_amount").val(totalTaxAmount);
+                    $("#total_vat").val(totalVAT);
+                    $("#total_amount").val(totalGrandTotal);
+                }
+            
+            
+            
+                // Function to perform additional calculations
+                function calc() {
+                    // No need to calculate row-wise here; it's handled in updateRowTotals
+                    // Update the right-bottom table after processing all rows
+                    updateRightBottomTable();
+                }
+            
+                // Event listener for input changes in the table rows
+                $('#tab_logic tbody').on('input', 'input', function () {
+                    var currentRow = $(this).closest('tr');
+                    updateRowTotals(currentRow);
+                    // Trigger additional calculations
+                    calc();
+                });
+            
+                // Initial calculation on page load
+                calc();
+            
+                // Event listener for changes in the input fields
+                $('#tab_logic tbody').on('input', 'input, select', function () {
+                    calc();
+                });
+            
+                // Initial calculation on page load
+                calc();
+            
+                $('#save_button').on('click', function () {
+                    // Trigger form submission
+                    $('form').submit();
+                });
+            });
+         </script>
+         <script>
+            //Automatically retrive customer data based on party selection
+            const party=document.getElementById('party')
+            party.addEventListener('change',async(e)=>{
+                const value=e.target.value
+                const response=await fetch(`{% url 'customer_data_ajax' %}?name=${value}`)
+                const jsonData=await response.json()
+                const data=jsonData.data
+                for (const val in data ){
+                    document.getElementById(`status_${val}`).textContent=data[val]
+                }
+            
+               try{
+               const dealerResponse=await fetch(`{% url 'get_dealer_for_party' %}?name=${value}`)
+               const dealerData=await dealerResponse.json()
+               document.getElementById('dealer').value=dealerData.data.dealer_name
+               console.log(dealerData)
+                  
+                  
+               }catch(err){
+                  
+                  console.log(err)
+                  document.getElementById('dealer').value="Not Defined"
+               }
+            
+            })
+            
+            const product=document.getElementById('product')
+            product.addEventListener('input',async(e)=>{
+                const value=e.target.value
+                const idata="{{idata}}"
+                if (value=="" || !idata.includes(value)){
+                    return
+                }
+                const response=await fetch(`{% url 'get_product_detail_ajax' %}?name=${value}`)
+                const jsonData=await response.json()
+                const data=jsonData.data
+                var selectElement = document.getElementById('product_unit');
+                selectElement.value = data.unit;
+                selectElement.disabled = true;
+            })
+         </script>
+         <script>
+            document.addEventListener('DOMContentLoaded', function () {
+            const switches = document.querySelectorAll('.switch');
+            
+            switches.forEach(function (switchElement) {
+            const checkbox = switchElement.querySelector('input[type="checkbox"]');
+            const target = switchElement.getAttribute('data-target');
+            
+            if (target) {
+            checkbox.addEventListener('change', function () {
+              const targetElement = document.getElementById(target);
+              if (this.checked && targetElement) {
+                  targetElement.style.opacity = '1';
+              } else if (targetElement) {
+                  targetElement.style.opacity = '0';
+              }
+            });
+            }
+            });
+            });
+            
+            function handlePasswordSubmit(){
+               var  password=document.getElementById('passwordInput').value
+                if (password==""){
+                    return 
+                }
+                //some validte function added later 
+                //if validated
+               var configuration=document.getElementById('configurationModalTrigger') 
+                configuration.click()
+            }
+            
+         </script>
+         <script>
+            function saved(){
+               localStorage.setItem('saved','true')
+            }
+            window.addEventListener('pageshow', function(event) {
+            var prevPage=localStorage.getItem('saved')
+            if (event.persisted && prevPage=='true') {
+            localStorage.setItem('saved','false')
+            document.getElementById('bank_receipt_amount').value=""
+            document.getElementById('cash_receipt_amount').value=""
+            window.location.reload();
+            } 
+            });
+         </script>
+         <script>
+            const cashModal=document.getElementById('cashModal')
+            function cashModalClose(){
+               cashModal.style.display='none';
+            }
+            function handleCashModalPopup(){
+               console.log("hello")
+               cashModal.style.display='block'
+            }
+            
+            const bankModal=document.getElementById('bankModal')
+            
+            function handleBankModalClose(){
+               bankModal.style.display='none'
+            }
+            function handleBankModalPopup(){
+               bankModal.style.display='block'
+            }
+            async function handleCashReceiptSubmit(e){
+               var url="{% url 'sales_cash_receipt' %}"
+               const amount=document.getElementById('cash_receipt_amount').value
+               if (amount=="" ){
+                  alert("Input some value in amount")
+                  return
+               }
+               const parsedAmount = parseFloat(amount);
+               if (isNaN(parsedAmount) || parsedAmount <= 0) {
+                alert("Please enter a valid number for the amount");
+               return;
+               }
+               const fetchData = {
+                   method: "POST",
+                  body: JSON.stringify({'amount':amount}),
+                       headers: { "Content-Type": "application/json" }
+                     };
+            try{
+               const response=await fetch(url,fetchData)
+               const data=await response.json()
+               alert("Amount Uploaded Successfully")
+               cashModal.style.display='none'
+               }catch(err){
+                        alert(err)
+               }
+            
+            }
+            
+            async function handleBankReceiptSubmit(e){
+               var url="{% url 'sales_bank_receipt' %}"
+               const amount=document.getElementById('bank_receipt_amount').value
+            
+               const ledger=document.getElementById('bank_receipt_ledger').value
+               if (amount=="" ||ledger=="" ){
+                  alert("Fill all fields before proceeding")
+                  return
+               }
+               const parsedAmount = parseFloat(amount);
+               if (isNaN(parsedAmount) || parsedAmount <= 0) {
+                alert("Please enter a valid number for the amount");
+               return;
+               }
+               const fetchData = {
+                   method: "POST",
+                  body: JSON.stringify({'amount':amount,'ledger':ledger}),
+                       headers: { "Content-Type": "application/json" }
+                     };
+            try{
+               const response=await fetch(url,fetchData)
+               const data=await response.json()
+               alert("Amount and Ledger Uploaded Successfully")
+
+               bankModal.style.display='none'
+               }catch(err){
+                        alert(err)
+               }
+            
+            }
+            
+            
+         </script>
+         </div>
+      </div>
+   </body>
+

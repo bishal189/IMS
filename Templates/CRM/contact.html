@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mss Contact</title>
+  <link rel="icon" href="/static/Icons/top.png"/>
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .todo-container {
+      max-width: 1200px;
+      margin: 50px auto;
+    }
+    .todo-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      grid-gap: 20px;
+    }
+    .todo-item {
+      transition: transform 0.3s ease-in-out;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .todo-item:hover {
+      transform: scale(1.05);
+    }
+    .card-body {
+      background-color: #f0f8ff;
+      padding: 15px;
+    }
+    .delete-icon,
+    .edit-icon {
+      color: #dc3545;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+    .todo-form {
+      background-color: #f0f8ff;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .form-icon {
+      font-size: 20px;
+      margin-right: 5px;
+      color: #007bff;
+    }
+    .form-btn {
+      background-color: #007bff;
+      color: #fff;
+      transition: background-color 0.3s ease-in-out;
+    }
+    .form-btn:hover {
+      background-color: #0056b3;
+    }
+    .search-bar {
+      position: relative;
+      margin-bottom: 10px;
+    }
+    .search-input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    .search-icon {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      color: #007bff;
+      cursor: pointer;
+    }
+    #nav-logo {
+      max-width: 325px;
+      max-height: 55px;
+  }
+
+  </style>
+</head>
+<body>
+
+  <div class="container todo-container">
+    <div>
+      <a class="navbar-brand" href="{% url "menu_page" %}">
+        <img src="/static/Logo/logo.png" alt="" id="nav-logo">
+      </a>
+      <h2 class="text-center animate__animated animate__fadeInDown " style="color : skyblue">Mss Contact Portal</h2>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-bar animate__animated animate__fadeInDown">
+      <input type="text" class="search-input" id="searchInput" placeholder="Search by Party Name">
+      <i class="fas fa-search search-icon"></i>
+    </div>
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary animate__animated animate__fadeInLeft" data-toggle="modal" data-target="#todoModal" style="position: absolute; top: 10px; left: 10px;">
+      <i class="fas fa-plus"></i> Add Contact
+    </button>
+
+    <div class="modal fade" id="todoModal" tabindex="-1" role="dialog" aria-labelledby="todoModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title animate__animated animate__fadeInDown" id="todoModalLabel">Fill The Information</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body todo-form">
+            <form id="todoForm">
+              <div class="form-group">
+                <label for="partyName">
+                  <i class="fas fa-user form-icon"></i> Party Name
+                </label>
+                <input type="text" class="form-control" id="partyName" required>
+              </div>
+              <div class="form-group">
+                <label for="contact">
+                  <i class="fas fa-phone form-icon"></i> Contact
+                </label>
+                <input type="text" class="form-control" id="contact" required>
+              </div>
+              <div class="form-group">
+                <label for="email">
+                  <i class="far fa-envelope form-icon"></i> Email
+                </label>
+                <input type="email" class="form-control" id="email" required>
+              </div>
+              <div class="form-group">
+                <label for="address">
+                  <i class="fas fa-map-marker-alt form-icon"></i> Address
+                </label>
+                <input type="text" class="form-control" id="address" required>
+              </div>
+              <div class="form-group">
+                <label for="website">
+                  <i class="fas fa-globe form-icon"></i> Website
+                </label>
+                <input type="text" class="form-control" id="website" required>
+              </div>
+              <div class="form-group">
+                <label for="designation">
+                  <i class="fas fa-briefcase form-icon"></i> Designation
+                </label>
+                <input type="text" class="form-control" id="designation" required>
+              </div>
+              <button type="submit" class="btn form-btn animate__animated animate__fadeInUp">Add Contact</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="todo-list animate__animated animate__fadeInUp" id="todoList">
+      <!-- Todo items will be added here dynamically -->
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const existingTasks = JSON.parse(localStorage.getItem('tasks')) || [];
+      const todoList = document.getElementById('todoList');
+      const todoForm = document.getElementById('todoForm');
+      const searchInput = document.getElementById('searchInput');
+
+      function renderTasks(tasks) {
+        todoList.innerHTML = '';
+        tasks.forEach(function(task, index) {
+          const card = document.createElement('div');
+          card.id = `taskCard-${index}`;
+          card.className = 'card todo-item animate__animated animate__fadeIn';
+          card.innerHTML = `
+            <div class="card-body">
+              <h5 class="card-title">Party Name: ${task.partyName}</h5>
+              <p class="card-text">
+                <i class="fas fa-user"></i> <strong>Contact:</strong> ${task.contact}<br>
+                <i class="far fa-envelope"></i> <strong>Email:</strong> ${task.email}<br>
+                <i class="fas fa-phone"></i> <strong>Contact:</strong> ${task.contact}<br>
+                <i class="fas fa-map-marker-alt"></i> <strong>Address:</strong> ${task.address}<br>
+                <i class="fas fa-globe"></i> <strong>Website:</strong> ${task.website}<br>
+                <i class="fas fa-briefcase"></i> <strong>Designation:</strong> ${task.designation}
+              </p>
+              <i class="fas fa-trash-alt delete-icon" data-index="${index}"></i>
+              <i class="fas fa-edit edit-icon" onclick="editTask(${index})"></i>
+            </div>
+          `;
+          todoList.appendChild(card);
+        });
+      }
+
+      window.editTask = function(index) {
+        const taskToEdit = existingTasks[index];
+        document.getElementById('partyName').value = taskToEdit.partyName;
+        document.getElementById('contact').value = taskToEdit.contact;
+        document.getElementById('email').value = taskToEdit.email;
+        document.getElementById('address').value = taskToEdit.address;
+        document.getElementById('website').value = taskToEdit.website;
+        document.getElementById('designation').value = taskToEdit.designation;
+
+        // Add a custom attribute to store the index of the task being edited
+        document.getElementById('todoForm').setAttribute('data-index', index);
+
+        $('#todoModal').modal('show');
+      };
+
+      function addTask(event) {
+        event.preventDefault();
+        const partyName = document.getElementById('partyName').value.trim();
+        const contact = document.getElementById('contact').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const address = document.getElementById('address').value.trim();
+        const website = document.getElementById('website').value.trim();
+        const designation = document.getElementById('designation').value.trim();
+
+        const editIndex = document.getElementById('todoForm').getAttribute('data-index');
+
+        if (editIndex !== null) {
+          existingTasks[editIndex] = {
+            partyName,
+            contact,
+            email,
+            address,
+            website,
+            designation
+          };
+
+          // Reset the editIndex attribute after editing
+          document.getElementById('todoForm').removeAttribute('data-index');
+        } else {
+          existingTasks.push({
+            partyName,
+            contact,
+            email,
+            address,
+            website,
+            designation
+          });
+        }
+
+        localStorage.setItem('tasks', JSON.stringify(existingTasks));
+        todoForm.reset();
+        renderTasks(existingTasks);
+        $('#todoModal').modal('hide');
+      }
+
+      // Update event listener for delete using event delegation
+      todoList.addEventListener('click', function(event) {
+        const deleteButton = event.target.closest('.delete-icon');
+        if (deleteButton) {
+          const index = deleteButton.getAttribute('data-index');
+          deleteTask(index);
+        }
+      });
+
+      function deleteTask(index) {
+        // Ask for confirmation before deleting
+        if (confirm("Are you sure you want to delete this contact?")) {
+          existingTasks.splice(index, 1);
+          localStorage.setItem('tasks', JSON.stringify(existingTasks));
+          renderTasks(existingTasks);
+        }
+      }
+
+      function searchCards() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const filteredTasks = existingTasks.filter(task => task.partyName.toLowerCase().includes(searchTerm));
+        renderTasks(filteredTasks);
+      }
+
+      todoForm.addEventListener('submit', addTask);
+      searchInput.addEventListener('input', searchCards);
+
+      renderTasks(existingTasks);
+    });
+  </script>
+</body>
+</html>

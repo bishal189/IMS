@@ -1,0 +1,40 @@
+<table class="table table-bordered" id="dataTable">
+    <tbody>
+      <tr>
+        <th>S.N</th>
+        <th scope="col" class="table-heading">
+          <i class="fa fa-leaf"></i> Group
+        </th>
+  
+        <th scope="col" class="table-heading">
+          <i class="fa fa-leaf"></i> Customer Name
+        </th>
+  
+        <th scope="col" class="table-heading">
+          <i class="fa fa-leaf"></i> Address
+        </th>
+        <th scope="col" class="table-heading"><i class="fa fa-leaf"></i> PAN</th>
+        <th scope="col" class="table-heading">
+          <i class="fa fa-leaf"></i> Phone
+        </th>
+  
+        <th scope="col" class="table-heading">
+          <i class="fa fa-leaf"></i> Account No
+        </th>
+      </tr>
+  
+      {% for data in customers %}
+      <tr>
+        <td>{{forloop.counter }}</td>
+        <td class="table-data">{{ data.group }}</td>
+        <td class="table-data">{{ data.name }}</td>
+        <td class="table-data">{{ data.address }}</td>
+        <td class="table-data">{{ data.pan }}</td>
+        <td class="table-data">{{ data.phone }}</td>
+  
+        <td class="table-data">{{ data.account_no }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  

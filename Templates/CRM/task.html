@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Task</title>
+  <link rel="icon" href="/static/Icons/top.png"/>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .container {
+      max-width: 800px;
+    }
+    .card {
+    
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+    .card-body {
+      background-color: #f0f8ff;
+      padding: 30px;
+      border-radius: 15px;
+    }
+    .form-icon {
+      font-size: 20px;
+      margin-right: 10px;
+      color: #007bff;
+    }
+    .form-btn {
+      background-color: #007bff;
+      color: #fff;
+      transition: background-color 0.3s ease-in-out;
+    }
+    .form-btn:hover {
+      background-color: #0056b3;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    label {
+      font-weight: bold;
+    }
+    textarea {
+      resize: vertical;
+    }
+
+    /* Adjustments for landscape size */
+    @media (orientation: landscape) {
+      .container {
+        max-width: 100%;
+       
+      }
+     
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="card">
+      <div class="card-body">
+        <form id="todoForm" method="post" action="{% url 'create_task' %}">
+          {% csrf_token %}
+          
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="partyName">
+                <i class="fas fa-user form-icon"></i> Party Name
+              </label>
+              <input type="text" class="form-control" id="partyName" required name="part_name">
+            </div>
+            
+            <div class="form-group col-md-6">
+              <label for="contact">
+                <i class="fas fa-phone form-icon"></i> Contact
+              </label>
+              <input type="text" class="form-control" id="contact" required name="contact">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="email">
+                <i class="far fa-envelope form-icon"></i> Email
+              </label>
+              <input type="email" class="form-control" id="email" required name="email">
+            </div>
+            
+            <div class="form-group col-md-6">
+              <label for="address">
+                <i class="fas fa-map-marker-alt form-icon"></i> Address
+              </label>
+              <input type="text" class="form-control" id="address" required name="address">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="website">
+                <i class="fas fa-globe form-icon"></i> Website
+              </label>
+              <input type="text" class="form-control" id="website" required name="website">
+            </div>
+            
+            <div class="form-group col-md-6">
+              <label for="designation">
+                <i class="fas fa-briefcase form-icon"></i> Referred By
+              </label>
+              <input type="text" class="form-control" id="designation" required name="designation">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-12">
+              <label for="task">
+                <i class="fas fa-tasks form-icon"></i> Task
+              </label>
+              <textarea class="form-control" id="task" rows="3" required name="task"></textarea>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="priority">
+                <i class="fas fa-sort-amount-up form-icon"></i> Priority
+              </label>
+              <input type="range" name="priority" class="form-control-range" id="priority" min="1" max="10" required>
+            </div>
+            
+            <div class="form-group col-md-6">
+              <label for="handledBy">
+                <i class="fas fa-user form-icon"></i> Handled By
+              </label>
+              <input type="text" class="form-control" id="handledBy" required name="handledby">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="status">
+                <i class="fas fa-flag form-icon"></i> Status
+              </label>
+              <select class="form-control" id="status" required name="status">
+                <option value="New">New</option>
+                <option value="Qualified">Qualified</option>
+                <option value="On Progress">On Progress</option>
+                <option value="Done">Done</option>
+                <option value="Decline">Decline</option>
+              </select>
+            </div>
+            <button type="submit" class="btn form-btn animate__animated animate__fadeInUp">Add Task</button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

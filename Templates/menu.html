@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MSS ERP</title>
+    <link rel="icon" href="/static/Icons/top.png" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.css"
+        integrity="sha512-OQDNdI5rpnZ0BRhhJc+btbbtnxaj+LdQFeh0V9/igiEPDiWE2fG+ZsXl0JEH+bjXKPJ3zcXqNyP4/F/NegVdZg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            background-color: #F8F9FA;
+            overflow-x: hidden;
+            transition: background-color linear .3s;
+        }
+        ul {
+            transition: max-height ease-in-out 0.4s;
+        }
+        aside {
+            transition: width ease-in-out .4s, border-right-color linear .3s;
+            overflow-x: auto;
+        }
+        
+        #right-side {
+            transition: padding ease-out .4s;
+        }
+        
+        #userDiv {
+            background-color: #f1f4f7;
+        }
+        i {
+            transition: transform .3s linear;
+        }
+        
+        .darkModeOn {
+            background-color: #3f3f3f;
+            color: #fff;
+        }
+        .darkModeOn aside {
+            border-right-color: rgba(25, 31, 52, 0.3);
+        }
+        .darkModeOn #userDiv {
+            background-color: #3a3a3a;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="flex h-screen w-screen">
+        <aside id="sidebar" class="w-[15.3rem] border-r-[1px]  border-gray-200 tracking-wide fixed h-screen">
+            <div class="flex justify-center mb-1">
+                <img src="/static/Logo/logo.png" alt="MSS ERP" class="w-40" id="logo" style="margin-top: 35px;">
+            </div>
+            <ul id="sidenav" class="tracking-wider mt-15">
+                    <ul id="links" class="px-3">
+                        <li><a href="#" class="capitalize text-sm flex items-center p-2 gap-3 hover:text-blue-400"><i
+                            class="ri-home-2-line text-lg"></i>
+                        <h1>overview</h1>
+                    </a>
+                </li>
+                        <li class="overflow-hidden">
+                            <div
+                                class="dropdown capitalize cursor-pointer text-sm px-2 py-2 flex items-center justify-between hover:text-blue-400">
+                                <span class="flex items-center gap-3"><i class="ri-focus-3-line text-lg"></i>
+                                    <h1>master
+                                        operations</h1>
+                                </span><i class="ri-arrow-down-s-line"></i>
+                            </div>
+                            <ul class="border-l-[1px] border-gray-400 relative left-8 max-h-0">
+                                <li><a href="{% url 'customer_setup' %}"
+                                        class="capitalize text-sm flex items-center px-2 py-2 gap-3 hover:text-blue-400 relative after:w-[6px] after:h-[1px] after:absolute after:top-5 after:left-0 after:bg-gray-400">customer
+                                        setup</a></li>
+                                <li><a href="{% url "suplier_setup" %}"
+                                        class="capitalize text-sm flex items-center px-2 py-2 gap-3 hover:text-blue-400 relative after:w-[6px] after:h-[1px] after:absolute after:top-5 after:left-0 after:bg-gray-400">supplier
+                                        setup</a></li>
+                                        <li><a href="#"
+                                            class="capitalize text-sm flex items-center px-2 py-2 gap-3 hover:text-blue-400 relative after:w-[6px] after:h-[1px] after:absolute after:top-5 after:left-0 after:bg-gray-400">Dealer
+                                            setup</a></li>
+                                <li><a href="{% url "ledger_set" %}"
+                                        class="capitalize text-sm flex items-center px-2 py-2 gap-3 hover:text-blue-400 relative after:w-[6px] after:h-[1px] after:absolute after:top-5 after:left-0 after:bg-gray-400">ledger
+                                        setup</a></li>
+                                <li><a href="{% url "main_item_nav" %}"
+                                        class="capitalize text-sm flex items-center px-2 py-2 gap-3 hover:text-blue-400 relative after:w-[6px] after:h-[1px] after:absolute after:top-5 after:left-0 after:bg-gray-400">item
+                                        setup</a></li>
+
+                              <li><a href="#"
+                                      class="capitalize text-sm flex items-center px-2 py-2 gap-3 hover:text-blue-400 relative after:w-[6px] after:h-[1px] after:absolute after:top-5 after:left-0 after:bg-gray-400">Employee
+                                  setup</a></li>
+
+                                            <li><a href="#"
+                                                class="capitalize text-sm flex items-center px-2 py-2 gap-3 hover:text-blue-400 relative after:w-[6px] after:h-[1px] after:absolute after:top-5 after:left-0 after:bg-gray-400">Cost Center
+                                        setup</a></li>
+                            </ul>
+                        </li>
+                        <li class="overflow-hidden">
+                            <div
+                                class="transaction-hub dropdown capitalize cursor-pointer text-sm px-2 py-2 flex items-center justify-between hover:text-blue-400">
+                                <span class="flex items-center gap-3"><i class="ri-money-rupee-circle-line text-lg"></i>
+                                    <h1>transaction hub</h1>
+                                </span><i class="ri-arrow-down-s-line"></i>
+                            </div>
+                            <ul class="border-l-[1px] border-gray-400 relative left-8 max-h-0">
+                                <li><a href="{% url "sales_invoice" %}"
+                                        class="capitalize text-sm flex items-center px-2 py-2 gap-3 hover:text-blue-400 relative after:w-[6px] after:h-[1px] after:absolute after:top-5 after:left-0 after:bg-gray-400">sales</a>
+                                </li>
+                                <li><a href="{% url "purchase_invoice" %}"
+                                        class="capitalize text-sm flex items-center px-2 py-2 gap-3 hover:text-blue-400 relative after:w-[6px] after:h-[1px] after:absolute after:top-5 after:left-0 after:bg-gray-400">purchase</a>
+                                </li>
+                                <li class="overflow-hidden">
+                                    <div
+                                        class="sub-dropdown capitalize cursor-pointer text-sm px-2 py-2 pr-10 flex items-center justify-between hover:text-blue-400 relative after:w-[6px] after:h-[1px] after:absolute after:top-5 after:left-0 after:bg-gray-400">
+                                        Journal<i class="ri-arrow-down-s-line"></i>
+                                    </div>
+                                    <ul class="border-l-[1px] border-gray-400 relative left-10 max-h-0">
+                                        <li><a href="{% url "journal_voucher" %}"
+                                                class="capitalize text-sm flex items-center px-2 py-2 gap-3 hover:text-blue-400 relative after:w-[6px] after:h-[1px] after:absolute after:top-5 after:left-0 after:bg-gray-400">
+                                                J.Voucher</a></li>
+                                        <li><a href="#"
+                                                class="capitalize text-sm flex items-center px-2 py-2 gap-3 hover:text-blue-400 relative after:w-[6px] after:h-[1px] after:absolute after:top-5 after:left-0 after:bg-gray-400">
+                                                Purchase Exp</a></li>
+                                    </ul>
+                                </li>
+
+                                <li class="overflow-hidden">
+                                    <div
+                                        class="sub-dropdown capitalize cursor-pointer text-sm px-2 py-2 pr-10 flex items-center justify-between hover:text-blue-400 relative after:w-[6px] after:h-[1px] after:absolute after:top-5 after:left-0 after:bg-gray-400">
+                                        receipt<i class="ri-arrow-down-s-line"></i>
+                                    </div>
+                                    <ul class="border-l-[1px] border-gray-400 relative left-10 max-h-0">
+                                        <li><a href="{% url "bank_receipt" %}"
+                                                class="capitalize text-sm flex items-center px-2 py-2 gap-3 hover:text-blue-400 relative after:w-[6px] after:h-[1px] after:absolute after:top-5 after:left-0 after:bg-gray-400">bank
+                                                reciept</a></li>
+                                        <li><a href="{% url "cash_receipt" %}"
+                                                class="capitalize text-sm flex items-center px-2 py-2 gap-3 hover:text-blue-400 relative after:w-[6px] after:h-[1px] after:absolute after:top-5 after:left-0 after:bg-gray-400">cash
+                                                reciept</a></li>
+                                    </ul>
+                                </li>
+                        </li>
+                        <li class="overflow-hidden">
+                            <div
+                                class="sub-dropdown capitalize cursor-pointer text-sm px-2 py-2 pr-10 flex items-center justify-between hover:text-blue-400 relative after:w-[6px] after:h-[1px] after:absolute after:top-5 after:left-0 after:bg-gray-400">
+                                payment<i class="ri-arrow-down-s-line"></i>
+                            </div>
+                            <ul
+                                class="border-l-[1px] border-gray-400 relative left-10 border-l[1px] border-l-gray-400 max-h-0">
+                                <li><a href="/bank_payment"
+                                        class="capitalize text-sm flex items-center px-2 py-2 gap-3 hover:text-blue-400 relative after:w-[6px] after:h-[1px] after:absolute after:top-5 after:left-0 after:bg-gray-400">bank
+                                        payment</a></li>
+                                <li><a href="{% url "payment" %}"
+                                        class="capitalize text-sm flex items-center px-2 py-2 gap-3 hover:text-blue-400 relative after:w-[6px] after:h-[1px] after:absolute after:top-5 after:left-0 after:bg-gray-400">cash
+                                        payment</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    </li>
+                    <li class="overflow-hidden">
+                        <div
+                            class="dropdown capitalize cursor-pointer text-sm px-2 py-2 flex items-center justify-between hover:text-blue-400">
+                            <span class="flex items-center gap-3"><i class="ri-file-chart-line text-lg"></i>
+                               <a href="{% url "report_home" %}">Report Hub</a>
+                            </span><i class="ri-arrow-down-s-line"></i>
+                        </div>
+                        <ul class="border-l-[1px] border-gray-400 relative left-8 max-h-0">
+                         
+                        </ul>
+                    </li>
+                    <li class="overflow-hidden">
+                        <div
+                            class="dropdown capitalize cursor-pointer text-sm px-2 py-2 flex items-center justify-between hover:text-blue-400">
+                            <span class="flex items-center gap-3"><i class="ri-customer-service-2-line text-lg"></i>
+                                <h1>customer care</h1>
+                            </span><i class="ri-arrow-down-s-line"></i>
+                        </div>
+                        <ul class="border-l-[1px] border-gray-400 relative left-8 max-h-0">
+                            <li><a href="{% url "create_task" %}"
+                                    class="capitalize text-sm flex items-center px-2 py-2 gap-3 hover:text-blue-400 relative after:w-[6px] after:h-[1px] after:absolute after:top-5 after:left-0 after:bg-gray-400">create
+                                    tasks</a></li>
+                            <li><a href="{% url "task_list" %}"
+                                    class="capitalize text-sm flex items-center px-2 py-2 gap-3 hover:text-blue-400 relative after:w-[6px] after:h-[1px] after:absolute after:top-5 after:left-0 after:bg-gray-400">tasks
+                                    list</a></li>
+                            <li><a href="{% url "create_contact" %}"
+                                    class="capitalize text-sm flex items-center px-2 py-2 gap-3 hover:text-blue-400 relative after:w-[6px] after:h-[1px] after:absolute after:top-5 after:left-0 after:bg-gray-400">Contacts</a>
+                            </li>
+                            <li><a href="{% url "create_notes" %}"
+                                    class="capitalize text-sm flex items-center px-2 py-2 gap-3 hover:text-blue-400 relative after:w-[6px] after:h-[1px] after:absolute after:top-5 after:left-0 after:bg-gray-400">notes</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="overflow-hidden">
+                        <div
+                            class="access-control dropdown capitalize cursor-pointer text-sm px-2 py-2 flex items-center justify-between hover:text-blue-400">
+                            <span class="flex items-center gap-3"><i class="ri-key-line text-lg"></i>
+                                <h1>access
+                                    control</h1>
+                            </span><i class="ri-arrow-down-s-line"></i>
+                        </div>
+                        <ul class="border-l-[1px] border-gray-400 relative left-8 max-h-0">
+                            <li><a href="{% url "create_user" %}"
+                                    class="capitalize text-sm flex items-center px-2 py-2 gap-3 hover:text-blue-400 relative after:w-[6px] after:h-[1px] after:absolute after:top-5 after:left-0 after:bg-gray-400">create
+                                    user</a></li>
+                            <li><a href="{% url "user_maintain" %}"
+                                    class="capitalize text-sm flex items-center px-2 py-2 gap-3 hover:text-blue-400 relative after:w-[6px] after:h-[1px] after:absolute after:top-5 after:left-0 after:bg-gray-400">manage
+                                    user</a></li>
+                        </ul>
+                    </li>
+                    <li class="overflow-hidden">
+                        <div
+                            class="access-control dropdown capitalize cursor-pointer text-sm px-2 py-2 flex items-center justify-between hover:text-blue-400">
+                            <span class="flex items-center gap-3"><i class="ri-equalizer-line text-lg"></i>
+                                <h1>Control Center</h1>
+                            </span><i class="ri-arrow-down-s-line"></i>
+                        </div>
+                        <ul class="border-l-[1px] border-gray-400 relative left-8 max-h-0">
+                            <li><a href="{% url "settings" %}"
+                                    class="capitalize text-sm flex items-center px-2 py-2 gap-3 hover:text-blue-400 relative after:w-[6px] after:h-[1px] after:absolute after:top-5 after:left-0 after:bg-gray-400">Configurations
+                                    </a></li>
+                    
+                        </ul>
+                    </li>
+                   
+                    <li><a href="#" class="capitalize text-sm flex items-center p-2 gap-3 hover:text-blue-400"><i
+                                class="ri-shield-keyhole-line text-lg"></i>
+                            <h1>protection tools</h1>
+                        </a>
+                    </li>
+                </li>
+            </ul>
+        </aside>
+        <section id="right-side" class="w-full pl-[16rem] pr-[1.5rem] py-2 flex flex-col gap-5">
+            <nav class="flex justify-between items-center px-4 py-1 rounded-md">
+                <div id="left-nav" class="flex items-center gap-3">
+                    <button id="toggle-sidebar" class="px-3 py-1 group">
+                        <i class="ri-menu-2-fill group-hover:text-blue-400"></i>
+                    </button>
+                    <div class="flex relative group">
+                        <label for="searchBox" class="cursor-pointer">
+                            <i class="ri-search-line absolute top-[3px] left-1 px-2 py-1 group-hover:text-blue-400"></i>
+                        </label>
+                        <input type="search" name="searchbox" id="searchBox" placeholder="Type something..."
+                            class="pl-9 py-2 pr-3 text-sm bg-transparent rounded-full">
+
+                            <h2>{{company}}</h2>
+                    </div>
+                </div>
+                <div id="left-nav" class="flex items-center gap-5">
+                    <button id="dark-mode" class="px-3 py-1 group">
+                        <i class="ri-moon-clear-line group-hover:text-blue-400 text-lg"></i>
+                    </button>
+                    <div id="user" class="relative">
+                        <div id="userBtn" class="flex items-center gap-1 cursor-pointer group">
+                            <img src="/static/Logo/logout.png" alt=""
+                                class="w-9 rounded-full border-[1px] border-gray-200"> <span class="group-hover:text-blue-400">{{ user.username }}</span>
+                            <i class="ri-arrow-down-s-line group-hover:text-blue-700"></i>
+                        </div>
+                        <ul id="userDiv"
+                            class="w-40 max-h-0 overflow-hidden absolute right-0 top-[125%] duration-400 rounded-md">
+                            <li><a href="#" class="capitalize flex items-center gap-3 p-3 hover:text-blue-400"><i
+                                        class="ri-profile-line"></i>profile</a></li>
+                            <li><a href="{% url "log_out" %}"
+                                    class="capitalize flex items-center gap-3 p-3 hover:text-blue-400"><i
+                                        class="ri-logout-circle-line"></i>log out</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <main id="main-container" class="p-5 h-full">
+                <div class="p-3 rounded-xl shadow-2xl grid place-content-center">
+                    <canvas id="myAreaChart"></canvas>
+                </div>
+                <div class="flex justify-between mt-20 p-10 gap-10">
+                    <div class="chart-container shadow-2xl w-1/3 p-3 rounded-lg grid place-content-center">
+                        <canvas id="radarChart"></canvas>
+                    </div>
+
+                    <!-- Polar area chart container -->
+                    <div class="chart-container shadow-2xl w-1/3 p-3 rounded-lg grid place-content-center">
+                        <canvas id="polarAreaChart"></canvas>
+                    </div>
+
+                    <!-- Bar chart container -->
+                    <div class="chart-container shadow-2xl w-1/3 p-3 rounded-lg grid place-content-center">
+                        <canvas id="donutChart" width="400" height="400"></canvas>
+                    </div>
+                </div>
+            </main>
+        </section>
+    </div>
+    <script>
+        // Radar Chart Data
+        const radarData = {
+          labels: ['Eating', 'Drinking', 'Sleeping', 'Designing', 'Coding', 'Cycling', 'Running'],
+          datasets: [{
+            label: 'My Radar Chart',
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 2,
+            data: [65, 59, 90, 81, 56, 55, 40]
+          }]
+        };
+    
+        // Radar Chart Options
+        const radarOptions = {
+          scale: {
+            angleLines: {
+              display: false
+            },
+            ticks: {
+              suggestedMin: 0,
+              suggestedMax: 100
+            }
+          }
+        };
+    
+        // Polar Area Chart Data
+        const polarData = {
+          labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple'],
+          datasets: [{
+            data: [12, 19, 3, 5, 2],
+            backgroundColor: ['rgba(255, 99, 132, 0.5)', 'rgba(54, 162, 235, 0.5)', 'rgba(255, 206, 86, 0.5)', 'rgba(75, 192, 192, 0.5)', 'rgba(153, 102, 255, 0.5)'],
+            borderWidth: 2
+          }]
+        };
+    
+        // Polar Area Chart Options
+        const polarOptions = {
+          scale: {
+            ticks: {
+              beginAtZero: true
+            }
+          }
+        };
+    
+        // Donut Chart Data
+        const donutData = {
+          labels: ['Red', 'Blue', 'Yellow'],
+          datasets: [{
+            data: [300, 50, 100],
+            backgroundColor: ['#ff6384', '#36a2eb', '#ffce56'],
+            hoverBackgroundColor: ['#ff6384', '#36a2eb', '#ffce56']
+          }]
+        };
+    
+        // Donut Chart Options
+        const donutOptions = {
+          cutoutPercentage: 70,
+          rotation: -0.5 * Math.PI
+        };
+    
+        // Get the context of the canvas elements
+        const radarCtx = document.getElementById('radarChart').getContext('2d');
+        const polarCtx = document.getElementById('polarAreaChart').getContext('2d');
+        const donutCtx = document.getElementById('donutChart').getContext('2d');
+    
+        // Create the charts
+        const radarChart = new Chart(radarCtx, {
+          type: 'radar',
+          data: radarData,
+          options: radarOptions
+        });
+    
+        const polarChart = new Chart(polarCtx, {
+          type: 'polarArea',
+          data: polarData,
+          options: polarOptions
+        });
+    
+        const donutChart = new Chart(donutCtx, {
+          type: 'doughnut',
+          data: donutData,
+          options: donutOptions
+        });
+      </script>
+    <script>
+        var ctx = document.getElementById('myAreaChart').getContext('2d');
+        var myAreaChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                datasets: [{
+                    label: 'Data 1',
+                    data: [10, 20, 30, 25, 35, 40, 30, 10, 40, 30, 20, 50],
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }, {
+                    label: 'Data 2',
+                    data: [20, 30, 25, 35, 40, 30, 45, 30, 20, 25, 20, 45],
+                    backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                    borderColor: 'rgba(255, 159, 64, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        stacked: true
+                    }]
+                }
+            }
+        });
+    </script>
+    <script>
+
+        // Setting up Toggle side bar button
+        const rightSide = document.querySelector("#right-side");
+        const toggleBtn = document.querySelector("#toggle-sidebar");
+        const sidebar = document.querySelector("aside");
+        const h1 = document.querySelectorAll("aside h1");
+        const h1Content = [];
+        for (let i = 0; i < h1.length; i++) {
+            h1Content.push(h1[i].textContent);
+        }
+
+        toggleBtn.addEventListener("click", () => {
+            const ulD = document.querySelectorAll("#links ul");
+            const arrows = document.querySelectorAll("aside .ri-arrow-down-s-line")
+
+            sidebar.classList.toggle("collapsed");
+            sidebar.classList.toggle("w-[18.3rem]");
+            sidebar.classList.toggle("w-[4rem]");
+            ulD.forEach(ul => {
+                ul.classList.remove("max-h-[30rem]");
+            })
+            arrows.forEach(arrow => {
+                if (arrow.classList.contains("rotate-180")) {
+                    arrow.classList.remove("rotate-180");
+                }
+            })
+
+            if (sidebar.classList.contains("collapsed")) {
+                rightSide.classList.remove("pl-[16rem]");
+                rightSide.classList.add("pl-20");
+                h1.forEach(h => {
+                    h.textContent = "";
+                });
+                dropdownMenus.forEach(dropdown => {
+
+                })
+                console.log(h1Content);
+            } else {
+                rightSide.classList.add("pl-[16rem]");
+                rightSide.classList.remove("pl-20");
+                for (let i = 0; i < h1.length; i++) {
+                    h1[i].textContent = h1Content[i];
+                }
+            }
+        })
+
+        // Making collapsed Sidebar appear again on hover
+        sidebar.addEventListener("mouseenter", () => {
+            if (sidebar.classList.contains("collapsed")) {
+                sidebar.classList.toggle("collapsed");
+                sidebar.classList.toggle("w-[18.3rem]");
+                sidebar.classList.toggle("w-[4rem]");
+
+                rightSide.classList.add("pl-[16rem]");
+                rightSide.classList.remove("pl-20");
+
+                for (let i = 0; i < h1.length; i++) {
+                    h1[i].textContent = h1Content[i];
+                }
+            }
+        })
+        
+        // Making Dropdowns appear and collapse
+        const dropdownMenus = document.querySelectorAll(".dropdown");
+
+        dropdownMenus.forEach((dropdown) => {
+            dropdown.addEventListener("click", (e) => {
+                const dropdownContent = e.currentTarget.parentElement.children[1];
+                const dropdownArrow = e.currentTarget.children[1];
+
+                dropdownMenus.forEach((otherDropdown) => {
+                    if (otherDropdown !== dropdown) {
+                        otherDropdown.parentElement.children[1].classList.remove("max-h-[30rem]");
+                        otherDropdown.children[1].classList.remove("rotate-180");
+                    }
+                });
+
+                dropdownArrow.classList.toggle("rotate-180")
+                dropdownContent.classList.toggle("max-h-[30rem]");
+
+                subDropDownMenus.forEach(subDropdown => {
+                    subDropdown.parentElement.children[1].classList.remove("max-h-[20rem]");
+                    subDropdown.children[0].classList.remove("rotate-180");
+                })
+
+            });
+        });
+
+        // Making Sub Dropdowns appear and collapse
+        const subDropDownMenus = document.querySelectorAll(".sub-dropdown");
+
+        subDropDownMenus.forEach(subDropdown => {
+            subDropdown.addEventListener("click", e => {
+                const subDropdownContent = e.currentTarget.parentElement.children[1];
+                const subDropdownArrow = e.currentTarget.children[0];
+
+                subDropDownMenus.forEach(otherSubDropdown => {
+                    if (otherSubDropdown !== subDropdown) {
+                        otherSubDropdown.children[0].classList.remove("rotate-180");
+                        otherSubDropdown.parentElement.children[1].classList.remove("max-h-[20rem]");
+                    }
+                })
+
+                subDropdownContent.classList.toggle("max-h-[20rem]");
+                subDropdownArrow.classList.toggle("rotate-180");
+            })
+        })
+
+        // Making User profile Button reactive
+        const userBtn = document.querySelector("#userBtn");
+        const userDiv = document.querySelector("#userDiv")
+
+        userBtn.addEventListener("click", () => {
+            userDiv.classList.toggle("max-h-28");
+            userBtn.children[2].classList.toggle("rotate-180");
+        })
+
+        // Setting up Darkmode Btn
+        const modeBtn = document.querySelector("#dark-mode");
+        const logo = document.querySelector("#logo");
+        const body = document.body;
+
+        modeBtn.addEventListener("click", toggleDarkMode)
+
+        function toggleDarkMode() {
+            body.classList.toggle("darkModeOn");
+
+            if(!(body.classList.contains("darkModeOn"))) {
+                logo.src = "/static/Logo/logo.png";
+            } else {
+                logo.src = "/static/Logo/logo.png";
+            }
+            
+            const savedDarkMode = body.classList.contains("darkModeOn");
+            localStorage.setItem("darkModeOn", savedDarkMode);
+        }
+        
+        const savedDarkMode = localStorage.getItem("darkModeOn") === "true";
+        
+        if(savedDarkMode) {
+            document.body.classList.add("darkModeOn");
+            logo.src = "/static/Logo/logo.png";
+        }
+    </script>
+</body>
+
+</html>

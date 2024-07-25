@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Your existing head content -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <title>Item Setup</title>
+    <!-- Add your custom styles here -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .form-container {
+            margin: 50px auto;
+            max-width: 1200px; /* Adjusted max-width */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+            transition: transform 0.3s ease-in-out;
+            overflow: hidden; /* Hide the overflow */
+        }
+
+        .form-container:hover {
+            transform: scale(1.02);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        .form-control {
+            border: 2px solid #007bff;
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .form-select {
+            border: 2px solid #007bff;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #fff;
+            color: #007bff;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: 2px solid #007bff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border: 2px solid #0056b3;
+        }
+        input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Modal -->
+        <div class="modal fade" id="supplierSetupModal" tabindex="-1" aria-labelledby="supplierSetupModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="customerSetupModalLabel">Item Setup</h5>
+                        <a href="{% url 'menu_page' %}" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></a>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" action="{% url 'i_setup' %}">
+                            {% csrf_token %}
+                            <!-- Form fields go here -->
+                            <div class="row">
+                                <!-- Left Column -->
+                                <div class="col-md-6">
+                                    <!-- Select Group -->
+                                    <div class="form-group">
+                                        <label for="groupSelect">Select Group</label>
+                                        <select class="form-select" id="groupSelect" name="select_group">
+                                            <option value="main">Primary</option>
+                                            <option value="user">Secondry</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Name Input Field -->
+                                    <div class="form-group">
+                                        <label for="nameInput">Name</label>
+                                        <input type="text" class="form-control" id="nameInput"
+                                            placeholder="Enter Name" name="item_name">
+                                    </div>
+
+                                    <!-- Address Input Field -->
+                                    <div class="form-group">
+                                        <label for="addressInput">Barcode</label>
+                                        <input type="text" class="form-control" id="addressInput"
+                                            placeholder="Enter Address" name="barcode">
+                                    </div>
+
+                                    <!-- PAN Input Field -->
+                                    <div class="form-group">
+                                        <label for="panInput">Part No</label>
+                                        <input type="text" class="form-control" id="panInput"
+                                            placeholder="Enter PAN" name="part_no">
+                                    </div>
+
+                                    <!-- Phone Input Field -->
+                                    <div class="form-group">
+                                        <label for="phoneInput">Purchase Rate</label>
+                                        <input type="number" class="form-control" id="phoneInput"
+                                            placeholder="Enter Phone" name="purchase_rate">
+                                    </div>
+
+                                    <!-- Phone Input Field -->
+                                    <div class="form-group">
+                                        <label for="phoneInput">Sales Rate</label>
+                                        <input type="number" class="form-control" id="phoneInput"
+                                            placeholder="Enter Phone" name="sales_rate">
+                                    </div>
+                                </div>
+
+                                <!-- Right Column -->
+                                <div class="col-md-6">
+                                    <!-- Remarks Input Field -->
+                                    <div class="form-group">
+                                        <label for="remarksInput">HS Code</label>
+                                        <input type="text" class="form-control" id="remarksInput"
+                                            placeholder="Enter Remarks" name="hs_code">
+                                    </div>
+
+                                    <!-- Select Group -->
+                                    <div class="form-group">
+                                        <label for="unitSelect">Select Unit</label>
+                                        <select class="form-select" id="unitSelect" name="unit_choice">
+                                            <option value="kg">Kg</option>
+                                            <option value="ltr">Ltr</option>
+                                            <option value="pax">Pax</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Select Group -->
+                                    <div class="form-group">
+                                        <label for="altUnitSelect">Alt Unit</label>
+                                        <select class="form-select" id="altUnitSelect" name="alt_unit">
+                                            <option value="gram">Gram</option>
+                                            <option value="drum">Drum</option>
+                                            <option value="pax">Pax</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="mainUnitInput">Main Unit</label>
+                                        <input type="text" class="form-control" id="mainUnitInput"
+                                            placeholder="Enter Main Unit" name="main_unit_rate">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="altUnitInput">Alt Unit</label>
+                                        <input type="text" class="form-control" id="altUnitInput"
+                                            placeholder="Enter Alt Unit" name="alt_unit_rate">
+                                    </div>
+
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="enableNonTax" name="enable_non_tax">
+                                        <label class="form-check-label" for="enableNonTax">
+                                            Enable NonTax Calculation
+                                        </label>
+                                    </div>
+
+                                    <!-- Submit Button -->
+                                    <div class="form-group mt-4">
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS (optional) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+
+    <script>
+        // JavaScript to open the modal on page load
+        var myModal = new bootstrap.Modal(document.getElementById('supplierSetupModal'));
+        document.querySelector('.btn-close').addEventListener('click', function () {
+            window.location.href = "{% url 'menu_page' %}";
+        });
+        myModal.show();
+    </script>
+</body>
+
+</html>

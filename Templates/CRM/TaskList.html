@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.2/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <style>
+      #nav-logo {
+        max-width: 325px;
+        max-height: 55px;
+    }
+
+    .homemap th {
+        font-weight: bold;
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        position: relative; /* Position relative for loading animation */
+    }
+
+    .homemap th::after {
+        content: "";
+        display: block;
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background-color: #007bff; /* Loading animation color */
+        transition: all 0.3s ease-in-out;
+        
+    }
+
+    .homemap th:hover::after {
+        width: 100%;
+        left: 0;
+       
+    }
+
+    .homemap th:hover{
+      cursor: pointer;
+    }
+
+    .homemap td {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        transition: background-color 0.3s ease; /* Hover effect transition */
+        
+    }
+
+    .homemap tr:hover td {
+        background-color: #a2a8b480; /* Hover color for table data */
+        cursor: pointer;
+    }
+
+    .table-heading i {
+        margin-right: 5px;
+    }
+
+    #searchInput {
+        margin-right: 40px;
+        transition: margin-right 0.3s ease;
+    }
+
+    #searchInput:focus {
+        margin-right: 100px;
+    }
+
+    .navbar {
+        width: 100%;
+        height: 38px;
+    }
+
+    .form-control:focus {
+        box-shadow: none;
+        border-color: #ced4da;
+    }
+
+
+
+    </style>
+    <title>Task Report</title>
+    <link rel="icon" href="/static/Icons/top.png"/>
+
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="{% url "menu_page" %}">
+    <img src="/static/Logo/logo.png" alt="" id="nav-logo">
+  </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="{% url "create_task" %}"><i class="fa fa-check"></i>Add Task<span class="sr-only"></span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" id="exportButton"><i class="fa fa-cube"></i> Export To Excel</a>
+        </li>
+      </ul>
+    </div>
+    <div class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="text" id="searchInput" placeholder="Search">
+    </div>    
+</nav>
+
+<div class="homemap">
+   <table class="table table-bordered" id="dataTable">
+    <tbody>
+        <tr>
+          <th> <i class="fa fa-sort" ></i> S.N</th>
+          <th> <i class="fa fa-users"></i> Party Name</th>
+          <th> <i class="fa fa-phone" ></i> Contact</th>
+          <th> <i class="fa fa-envelope" ></i> Email</th>
+          <th> <i class="fa fa-flag" ></i> Address</th>
+          <th> <i class="fa fa-globe" ></i> Website</th>
+          <th> <i class="fa fa-user-secret" ></i> Referred By</th>
+          <th> <i class="fa fa-handshake-o" ></i> Task</th>
+          <th> <i class="fa fa-heartbeat" ></i> Priority</th>
+          <th> <i class="fa fa-male" ></i> Handled By</th>
+          <th> <i class="fa fa-refresh" ></i> Status</th>
+        </tr>
+        {% for crm in tasks %}
+        <tr>
+            <td>{{forloop.counter }}</td>
+            <td>{{crm.part_name}}</td>
+            <td>{{crm.contact}}</td>
+            <td>{{crm.email}}</td>
+            <td>{{crm.address}}</td>
+            <td>{{crm.website}}</td>
+            <td>{{crm.designation}}</td>
+            <td>{{crm.task}}</td>
+            <td>{{crm.priority}}</td>
+            <td>{{crm.handled_by}}</td>
+            <td>{{crm.status}}</td>
+            
+            </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+
+
+<script>
+    // Add event listener for the "Export To Excel" button click
+    document.getElementById('exportButton').addEventListener('click', function () {
+      exportToExcel();
+    });
+
+    // Add event listener for the search input
+    document.getElementById('searchInput').addEventListener('input', function () {
+      filterTable();
+    });
+
+    function filterTable() {
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("searchInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("dataTable");
+      tr = table.getElementsByTagName("tr");
+
+      // Loop through all table rows, and hide those that don't match the search query
+      for (i = 0; i < tr.length; i++) {
+        var partyName = tr[i].getElementsByTagName("td")[1];
+        var depositingDate = tr[i].getElementsByTagName("td")[4];
+        var chequeNumber = tr[i].getElementsByTagName("td")[5];
+
+        if (partyName || depositingDate || chequeNumber) {
+          var partyNameText = partyName.textContent || partyName.innerText;
+          var depositingDateText = depositingDate.textContent || depositingDate.innerText;
+          var chequeNumberText = chequeNumber.textContent || chequeNumber.innerText;
+
+          if (
+            partyNameText.toUpperCase().indexOf(filter) > -1 ||
+            depositingDateText.toUpperCase().indexOf(filter) > -1 ||
+            chequeNumberText.toUpperCase().indexOf(filter) > -1
+          ) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    }
+
+    function exportToExcel() {
+      // Get the table data
+      var table = document.getElementById("dataTable");
+      var rows = table.getElementsByTagName("tr");
+      var data = [];
+
+      // Iterate through rows and cells to get data
+      for (var i = 1; i < rows.length; i++) {
+        var row = rows[i];
+        var rowData = [];
+
+        for (var j = 0; j < row.cells.length; j++) {
+          rowData.push(row.cells[j].textContent.trim());
+        }
+
+        data.push(rowData);
+      }
+
+      // Create a worksheet
+      var ws = XLSX.utils.aoa_to_sheet([['S.N', 'Party Name', 'Contact', 'Email', 'Address', 'Website', 'Designation', 'Task', 'Priority', 'Handled By', 'Status']].concat(data));
+
+      // Create a workbook
+      var wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Sheet 1');
+
+      // Save the workbook
+      XLSX.writeFile(wb, 'Exported_Data.xlsx');
+    }
+</script>
+
+</script>
+</body>
+</html>

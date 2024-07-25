@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Your existing head content -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <title>Customer Group</title>
+    <link rel="icon" href="/static/Icons/top.png" />
+
+    <!-- Add your custom styles here -->
+    <style>
+      body {
+        background-color: #f8f9fa;
+      }
+
+      .form-container {
+        margin: 50px auto;
+        max-width: 900px; /* Increased max-width */
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        background-color: #ffffff;
+        transition: transform 0.3s ease-in-out;
+      }
+
+      .form-container:hover {
+        transform: scale(1.02);
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-group label {
+        color: #007bff;
+        font-weight: bold;
+      }
+
+      .form-control {
+        border: 2px solid #007bff;
+        border-radius: 5px;
+        padding: 10px;
+      }
+
+      .form-select {
+        border: 2px solid #007bff;
+        border-radius: 5px;
+        padding: 10px;
+        background-color: #fff;
+        color: #007bff;
+      }
+
+      .btn-primary {
+        background-color: #007bff;
+        border: 2px solid #007bff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .btn-primary:hover {
+        background-color: #0056b3;
+        border: 2px solid #0056b3;
+      }
+
+      .btn-primary i {
+        margin-right: 8px; /* Adjust the spacing between icon and text */
+      }
+
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+
+      /* Firefox */
+      input[type="number"] {
+        -moz-appearance: textfield;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <!-- Modal -->
+      <div
+        class="modal fade"
+        id="supplierSetupModal"
+        tabindex="-1"
+        aria-labelledby="supplierSetupModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="customerSetupModalLabel">
+                <i class="fa fa-wrench"></i> Create Group
+              </h5>
+              <a
+                href="{% url 'customer_setup' %}"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></a>
+            </div>
+            <div class="modal-body">
+              <form method="post" action='{% url "create_group" %}'>
+                {% csrf_token %}
+                <div class="row">
+                  <!-- Left Column -->
+                  <div class="col-md-6">
+                    <!-- Select Group -->
+                    <div class="form-group">
+                      <label for="groupSelect">Under Group</label>
+                      <select
+                        class="form-select"
+                        id="groupSelect"
+                        name="customer_under_group"
+                      >
+                        <option value="Primary Group">Primary Group</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="nameInput">Group Id</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        placeholder="Enter Group Id"
+                        name="customer_group_id"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label for="nameInput">Group Name</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Enter Group Name"
+                        name="customer_group_name"
+                      />
+                    </div>
+                  </div>
+
+                  <!-- Right Column -->
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="lockTransaction">Account It</label>
+                      <select class="form-select" name="customer_account_id">
+                        <option value="Test">Test</option>
+                        <option value="Demo">Demo</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="lockTransaction">Parent</label>
+                      <select
+                        class="form-select"
+                        id="lockTransaction"
+                        name="customer_parrent"
+                      >
+                        <option value="None">Primary Group</option>
+
+                        {% for group in group_group %}
+                        <option value="{{ group.customer_group_name }}">
+                          {{ group.customer_group_name }}
+                        </option>
+                        {% endfor %}
+                      </select>
+                    </div>
+
+                    <!-- Hidden Field for Parent Group -->
+                    <input
+                      type="hidden"
+                      id="parentGroup"
+                      name="parent_group"
+                      value=""
+                    />
+
+                    <!-- Submit Button -->
+                    <div class="form-group mt-4">
+                      <button type="submit" class="btn btn-primary">
+                        <i class="fa fa-save"></i> Save
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS (optional) -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      // JavaScript to open the modal on page load
+      var myModal = new bootstrap.Modal(
+        document.getElementById("supplierSetupModal")
+      );
+      document
+        .querySelector(".btn-close")
+        .addEventListener("click", function () {
+          window.location.href = "{% url 'customer_setup' %}";
+        });
+      myModal.show();
+
+      document
+        .getElementById("lockTransaction")
+        .addEventListener("change", function () {
+          document.getElementById("parentGroup").value = this.value;
+        });
+    </script>
+  </body>
+</html>

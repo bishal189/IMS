@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MSS COMPANY INFO</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f0f0f0;
+        background-image: url("https://images.pexels.com/photos/1054218/pexels-photo-1054218.jpeg?cs=srgb&dl=pexels-stywo-1054218.jpg&fm=jpg");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        position: relative;
+      }
+
+      body::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 0;
+      }
+
+      .container {
+        width: 800px;
+        height: 600px;
+        background-color: rgba(255, 255, 255, 0.192);
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        z-index: 1;
+      }
+      h1,
+      h2 {
+        text-align: center;
+        color: #ffffff;
+        padding: 20px 0;
+        margin: 0;
+        border-bottom: 2px solid #1a5f7a;
+      }
+      .company-list {
+        flex-grow: 1;
+        overflow-y: auto;
+        padding: 20px;
+      }
+      .company-item {
+        background-color: #e6f2ff3d;
+        border: 1px solid #bbd6ee31;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        padding: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .company-name {
+        font-weight: bold;
+        color: #1a5f7a;
+        text-decoration: none;
+      }
+      .company-name:hover {
+        text-decoration: underline;
+      }
+      .company-period {
+        color: #ffffff;
+        font-size: 0.9em;
+      }
+      .create-button {
+        text-align: center;
+        padding: 20px 0;
+      }
+      button {
+        padding: 10px 20px;
+        background-color: #1a5f7a;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1em;
+      }
+      button:hover {
+        background-color: #134b61;
+      }
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.4);
+        align-items: center;
+        justify-content: center;
+      }
+      .modal-content {
+        background-color: #fefefe;
+        padding: 20px;
+        width: 80%;
+        max-width: 600px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transform: scale(0.7);
+        opacity: 0;
+        transition: all 0.3s ease-in-out;
+      }
+      .modal.show .modal-content {
+        transform: scale(1);
+        opacity: 1;
+      }
+      .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      .close:hover {
+        color: #000;
+      }
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+      }
+      .form-grid label {
+        display: block;
+        margin-bottom: 5px;
+        color: #1a5f7a;
+      }
+      .form-grid input,
+      .form-grid select {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+        border: 1px solid #bbd6ee;
+        border-radius: 4px;
+      }
+      .footer {
+        background-color: rgba(8, 181, 238, 0.103);
+        height: 10px;
+        padding: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 14px;
+        color: #000000;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Select Company</h1>
+      <div class="company-list">
+
+        {% if companies %}
+
+        {% for company in companies %}
+        <div class="company-item">
+          <a href="{% url 'company_landing' company.id %}" class="company-name"
+            >{{company.name}}-{{company.financial_year}}</a
+          >
+          <span class="company-period">{{company.created_at}}</span>
+        </div>
+
+        {% endfor %}
+        {% else %}
+
+        <div class="company-item">
+            <a href="#" class="company-name"
+              >No companies</a
+            >
+            {% comment %} <span class="company-period">17-Jul-23 to 16-Jul-24</span> {% endcomment %}
+          </div>
+        {% endif %}
+        <!-- Add more company items here -->
+      </div>
+      <div class="create-button">
+        <button onclick="openModal()">Create Company</button>
+      </div>
+      <div class="footer">
+        <span id="currentDay"></span>
+        <span id="currentTime"></span>
+        <span id="currentDate"></span>
+      </div>
+    </div>
+
+    <div id="companyModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2 style="color: black;" >Create New Company</h2>
+        <br>
+        <br>
+        <form class="form-grid" method='POST' action='{% url "create_company" %}'>
+            {% csrf_token %}
+          <div>
+            <label for="companyName">Company Name:</label>
+            <input type="text" name='name' id="companyName" required />
+          </div>
+          <div>
+            <label for="address">Address:</label>
+            <input type="text" name='address' id="address" />
+          </div>
+          <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email"  name='email' />
+          </div>
+          <div>
+            <label for="contactNo">Contact No:</label>
+            <input type="tel" name='contact_no' id="contactNo" />
+          </div>
+         
+         
+
+          <div>
+            <label for="country">Country:</label>
+            <select id="country" onchange="updateProvinces()" name='country'>
+              <option value="">Select Country</option>
+              <option value="Nepal">Nepal</option>
+              <option value="India">India</option>
+              <option value="Japan">Japan</option>
+              <option value="Bhutan">Bhutan</option>
+              <option value="China">China</option>
+            </select>
+          </div>
+            
+          <div>
+            <label for="province">Province:</label>
+            <select id="province" name='province'>
+              <option value="">Select Province</option>
+            </select>
+          </div>
+          
+          <div>
+            <label for="mobileNo">Pan No:</label>
+            <input type="tel" id="mobileNo" name='pan_no' />
+          </div>
+
+          <div>
+            <label for="country">Company Type</label>
+            <select id="country" onchange="updateProvinces()" name='company_type'>
+              <option value="">Select Type</option>
+              <option value="Nepal">Trading</option>
+              <option value="India">Travel</option>
+              <option value="Japan">ISP</option>
+              <option value="Bhutan">Security</option>
+              <option value="China">Construction</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="mobileNo">Mobile No:</label>
+            <input type="tel" id="mobileNo" name='mobile_no' />
+          </div>
+          
+
+
+          <div>
+            <label for="financialYear">Financial Year:</label>
+            <input type="text" id="financialYear" name='financial_year' />
+          </div>
+          <button type="submit" style="grid-column: span 2">
+            Create Company
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      function openModal() {
+        const modal = document.getElementById("companyModal");
+        modal.style.display = "flex";
+        setTimeout(() => {
+          modal.classList.add("show");
+        }, 10);
+      }
+
+      function closeModal() {
+        const modal = document.getElementById("companyModal");
+        modal.classList.remove("show");
+        setTimeout(() => {
+          modal.style.display = "none";
+        }, 300);
+      }
+
+      window.onclick = function (event) {
+        const modal = document.getElementById("companyModal");
+        if (event.target == modal) {
+          closeModal();
+        }
+      };
+
+      function updateProvinces() {
+        const country = document.getElementById("country").value;
+        const provinceSelect = document.getElementById("province");
+        provinceSelect.innerHTML = '<option value="">Select Province</option>';
+
+        const provinces = {
+          Nepal: [
+            "Province 1",
+            "Province 2",
+            "Bagmati Province",
+            "Gandaki Province",
+            "Lumbini Province",
+            "Karnali Province",
+            "Sudurpashchim Province",
+          ],
+          India: [
+            "Maharashtra",
+            "Uttar Pradesh",
+            "Tamil Nadu",
+            "Karnataka",
+            "Gujarat",
+          ],
+          Japan: ["Hokkaido", "Tokyo", "Osaka", "Kyoto", "Fukuoka"],
+          Bhutan: [
+            "Thimphu",
+            "Paro",
+            "Punakha",
+            "Wangdue Phodrang",
+            "Bumthang",
+          ],
+          China: ["Guangdong", "Shandong", "Henan", "Sichuan", "Jiangsu"],
+        };
+
+        if (provinces[country]) {
+          provinces[country].forEach((province) => {
+            const option = document.createElement("option");
+            option.value = province;
+            option.textContent = province;
+            provinceSelect.appendChild(option);
+          });
+        }
+      }
+
+      function updateFooter() {
+        const days = [
+          "Sunday",
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+        ];
+        const now = new Date();
+
+        document.getElementById("currentDay").textContent = days[now.getDay()];
+        document.getElementById("currentTime").textContent =
+          now.toLocaleTimeString();
+        document.getElementById("currentDate").textContent =
+          now.toLocaleDateString();
+      }
+
+      // Update footer every second
+      setInterval(updateFooter, 1000);
+
+      // Initial call to set footer content immediately
+      updateFooter();
+    </script>
+  </body>
+</html>

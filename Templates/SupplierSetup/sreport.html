@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.2/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <style>
+      #nav-logo {
+        max-width: 325px;
+        max-height: 55px;
+    }
+
+    .homemap th {
+        font-weight: bold;
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        position: relative; /* Position relative for loading animation */
+    }
+
+    .homemap th::after {
+        content: "";
+        display: block;
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background-color: #007bff; /* Loading animation color */
+        transition: all 0.3s ease-in-out;
+        
+    }
+
+    .homemap th:hover::after {
+        width: 100%;
+        left: 0;
+       
+    }
+
+    .homemap th:hover{
+      cursor: pointer;
+    }
+
+    .homemap td {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        transition: background-color 0.3s ease; /* Hover effect transition */
+        
+    }
+
+    .homemap tr:hover td {
+        background-color: #a2a8b480; /* Hover color for table data */
+        cursor: pointer;
+    }
+
+    .table-heading i {
+        margin-right: 5px;
+    }
+
+    #searchInput {
+        margin-right: 120px;
+        transition: margin-right 0.3s ease;
+    }
+
+    
+
+    .navbar {
+        width: 109%;
+        height: 38px;
+    }
+
+    .form-control:focus {
+        box-shadow: none;
+        border-color: #ced4da;
+    }
+
+
+
+    </style>
+    <title>Supplier Report</title>
+    <link rel="icon" href="/static/Icons/top.png"/>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light" >
+    <img src="/static/Logo/logo.png" alt="" id="nav-logo">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="{% url "create_supplier" %}"><i class="fa fa-check"></i>Add Supplier<span class="sr-only"></span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" id="exportButton"><i class="fa fa-cube"></i> Export To Excel</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url "menu_page" %}"><i class="fa fa-home"></i> Return Home</a>
+          </li>
+      </ul>
+    </div>
+    <div class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="text" id="searchInput" placeholder="Search Here">
+    </div>    
+</nav>
+
+<div class="homemap">
+   <table class="table table-bordered" id="dataTable">
+    <tbody>
+        <tr>
+          <th>S.N</th>
+          <th scope="col" class="table-heading">
+            <i class="fa fa-leaf"></i> Group
+          </th>
+          <th scope="col" class="table-heading">
+            <i class="fa fa-leaf"></i> Terms & Condition
+          </th>
+          <th scope="col" class="table-heading">
+            <i class="fa fa-leaf"></i> Supplier Name
+          </th>
+          <th scope="col" class="table-heading">
+            <i class="fa fa-leaf"></i> Supplier Category
+          </th>
+          <th scope="col" class="table-heading">
+            <i class="fa fa-leaf"></i> Address
+          </th>
+          <th scope="col" class="table-heading">
+            <i class="fa fa-leaf"></i> PAN
+          </th>
+          <th scope="col" class="table-heading">
+            <i class="fa fa-leaf"></i> Phone
+          </th>
+          <th scope="col" class="table-heading">
+            <i class="fa fa-leaf"></i> Link Account Id
+          </th>
+          <th scope="col" class="table-heading">
+            <i class="fa fa-leaf"></i> Supplier Type
+          </th>
+          <th scope="col" class="table-heading">
+            <i class="fa fa-leaf"></i> Account No
+          </th>
+        
+        </tr>
+
+        {% for data in supplier %}
+        <tr class='item-row'>
+          <td>{{forloop.counter }}</td>
+          <td class="table-data">{{ data.group.group_name }}</td>
+          <td class="table-data">{{ data.terms_condition}}</td>
+          <td class="table-data">{{ data.name}}</td>
+          <td class="table-data">{{ data.category }}</td>
+          <td class="table-data">{{ data.address }}</td>
+          <td class="table-data">{{ data.pan }}</td>
+          <td class="table-data">{{ data.phone }}</td>
+          <td class="table-data">{{ data.link_account_id }}</td>
+          <td class="table-data">{{ data.supplier_type}}</td>
+          <td class="table-data">{{ data.account_number}}</td>
+        
+    
+          
+        </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+<script>
+    // Add event listener for the "Export To Excel" button click
+    document.getElementById('exportButton').addEventListener('click', function () {
+      exportToExcel();
+    });
+
+    // Add event listener for the search input
+    document.getElementById('searchInput').addEventListener('input', function () {
+      filterTable();
+    });
+
+    function filterTable() {
+      var input, filter, table, tr, td, i, j, txtValue;
+      input = document.getElementById("searchInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("dataTable");
+      tr = table.getElementsByTagName("tr");
+    
+      // Loop through all table rows
+      for (i = 1; i < tr.length; i++) {
+        var rowVisible = false; // Flag to check if any column contains the filter text
+    
+        // Loop through all table cells in the current row
+        for (j = 0; j < tr[i].cells.length; j++) {
+          td = tr[i].cells[j];
+          if (td) {
+            txtValue = td.textContent || td.innerText;
+    
+            // Check if any cell contains the filter text
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+              rowVisible = true;
+              break; // No need to check other cells in this row
+            }
+          }
+        }
+    
+        // Show or hide the row based on the flag
+        if (rowVisible) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+    
+
+    function exportToExcel() {
+      // Get the table data
+      var table = document.getElementById("dataTable");
+      var rows = table.getElementsByTagName("tr");
+      var data = [];
+
+      // Iterate through rows and cells to get data
+      for (var i = 1; i < rows.length; i++) {
+        var row = rows[i];
+        var rowData = [];
+
+        for (var j = 0; j < row.cells.length; j++) {
+          rowData.push(row.cells[j].textContent.trim());
+        }
+
+        data.push(rowData);
+      }
+
+      // Create a worksheet
+      var ws = XLSX.utils.aoa_to_sheet([['S.N', 'Party Name', 'Contact', 'Email', 'Address', 'Website', 'Designation', 'Task', 'Priority', 'Handled By', 'Status']].concat(data));
+
+      // Create a workbook
+      var wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Sheet 1');
+
+      // Save the workbook
+      XLSX.writeFile(wb, 'Exported_Data.xlsx');
+    }
+</script>
+
+</body>
+</html>
