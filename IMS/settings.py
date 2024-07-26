@@ -95,19 +95,11 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
         'ATOMIC_REQUESTS': True,
-    },
-     'company_bishal': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'company_databases/bishal1.db',
-        'ATOMIC_REQUESTS': True,
-    },
-    'company_another': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'company_databases/another1.db',
-        'ATOMIC_REQUESTS': True,
+                'CONN_HEALTH_CHECKS': False,  # Add this line
     }
+  
 }
-
+CONN_HEALTH_CHECKS = False
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -133,6 +125,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 TIME_ZONE = 'UTC'
 USE_TZ = True
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 

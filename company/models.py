@@ -33,23 +33,9 @@ class Company(models.Model):
     mobile_no = models.CharField(max_length=15)
     financial_year = models.CharField(max_length=9,null=True,blank=True)  # Example: 2023-2024
     db_name = models.CharField(max_length=255, unique=True,null=True,blank=True)
-    created_at = models.DateTimeField(auto_now_add=True,blank=True,null=True)
 
-    def __str__(self):
-        return self.name
     
 
 
 
 
-
-@receiver(post_save, sender=Company)
-def create_database(sender, instance, created, **kwargs):
-    if created:
-        sanitized_name = sanitize_db_name(instance.name)
-        db_name = f"{sanitized_name}.db"
-        db_path = os.path.join('company_databases', db_name)
-
-        # Create the database file if it does not exist
-        if not os.path.exists(db_path):
-            open(db_path, 'w').close()
