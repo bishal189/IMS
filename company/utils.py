@@ -18,18 +18,48 @@ def get_db_path(alias):
     """
     return os.path.join('company_databases', f"{alias}.db")
 
-def add_database_config(alias, db_name):
-    """
-    Add a dynamic database configuration to Django settings.
-    """
-    db_path = os.path.join('company_databases', f"{alias}.db")
+import os
+from pathlib import Path
+from django.core.management import call_command
+from django.conf import settings
 
+def create_company_database(company_name):
+    """
+    Create a new database file for a company and apply migrations.
+    """
+    # Define the path for the new database
+    db_path = os.path.join('company_databases', f"{company_name}.sqlite3")
+    
+    # Create the database directory if it doesn't exist
+    os.makedirs(os.path.dirname(db_path), exist_ok=True)
+    
+    # Define a unique alias for the new database
+    alias = company_name
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    print(BASE_DIR / f'{db_path}')
+
+    # Add database configuration dynamically
     if alias not in settings.DATABASES:
         settings.DATABASES[alias] = {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': db_path,
+            'NAME': BASE_DIR / f'{db_path}',
+                    'TIME_ZONE': 'Asia/Tokyo',
+
             'ATOMIC_REQUESTS': True,
+            'CONN_HEALTH_CHECKS': False,
+            'CONN_MAX_AGE': 30,
+            'OPTIONS': {},
+            'AUTOCOMMIT': True
         }
         print(f"Added database configuration for '{alias}' with path '{db_path}'.")
-    else:
-        print(f"Database configuration for '{alias}' already exists.")
+
+    # Create and apply migrations for the new database
+    try:
+        print("Creating migrations for new database...")
+        call_command('makemigrations')
+        print("Applying migrations...")
+        call_command('migrate', database=alias)
+    except Exception as e:
+        print(f"Error during migration: {e}")
+        raise
+

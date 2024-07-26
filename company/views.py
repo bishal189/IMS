@@ -8,12 +8,10 @@ from django.shortcuts import get_object_or_404, render
 from .models import Company
 from django.db import connections,OperationalError
 import os
-from .utils import add_database_config,get_db_path
+from .utils import get_db_path,create_company_database
 
 def company_home(request):
-    print('hello orld')
     company=Company.objects.all()
-    print(company,'company')
     context={
         'companies':company
     }
@@ -23,15 +21,11 @@ def company_home(request):
 
 def company_landing(request, company_id):
     company = get_object_or_404(Company, pk=company_id)
-    sanitized_name = sanitize_db_name('another')
+    sanitized_name = sanitize_db_name(company.name)
     print(f"Sanitized name: {sanitized_name}")
 
     # Create a mapping from sanitized company names to database aliases
-    database_alias = {
-        'bishal': 'company_bishal',
-        'another': 'company_another'
-    }.get(sanitized_name, 'default')  # Default to 'default' if no match
-
+    database_alias=sanitized_name
     connection_message = ""
     
     try:
@@ -67,16 +61,15 @@ def company_landing(request, company_id):
 def create_company(request):
     if request.method=='POST':
         
-       
         form = CompanyForm(request.POST)
+        print(form)
         if form.is_valid():
             form.save()
             return redirect('company_home')
         
     else:
-      
         
-        return render(request,'landing.html')
+        return redirect('company_home')
         
         
         
