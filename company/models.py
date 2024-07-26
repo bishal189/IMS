@@ -8,7 +8,7 @@ from django.db import connections, connection
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 # from .models import Company
-from .utils import sanitize_db_name
+from .utils import create_company_database, sanitize_db_name
 from django.core.management import call_command
 
 
@@ -39,3 +39,10 @@ class Company(models.Model):
 
 
 
+@receiver(post_save, sender=Company)
+def create_database(sender, instance, created, **kwargs):
+    if created:
+        sanitized_name = sanitize_db_name(instance.name)
+
+        # Create the database file if it does not exist
+        create_company_database(sanitized_name)

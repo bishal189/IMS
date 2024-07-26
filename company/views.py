@@ -65,8 +65,7 @@ def create_company(request):
         print(form)
         if form.is_valid():
             form.save()
-        create_company_database("demo1")
-        return redirect('company_home')
+            return redirect('company_home')
         
     else:
         
